@@ -1,7 +1,8 @@
 package Model;
 
 public class Staff extends Person{
-    public Staff(String name, String age, String sex) {
-        super(name, age, sex);
+
+    public Staff(String ID, String name, String age, String sex) {
+        super(ID, name, age, sex);
     }
 }
