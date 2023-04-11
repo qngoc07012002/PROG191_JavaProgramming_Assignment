@@ -12,4 +12,20 @@ public class Product {
         this.quantity = quantity;
         this.exp = exp;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public String getExp() {
+        return exp;
+    }
 }

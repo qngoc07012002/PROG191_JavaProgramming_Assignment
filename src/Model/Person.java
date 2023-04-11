@@ -12,4 +12,20 @@ public abstract class Person {
         this.age = age;
         this.sex = sex;
     }
+
+    public String getID() {
+        return ID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public String getSex() {
+        return sex;
+    }
 }
