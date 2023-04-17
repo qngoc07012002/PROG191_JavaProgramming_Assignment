@@ -1,10 +1,10 @@
 package Controller;
 
-import Model.Order;
+import Model.Order.Order;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrrderController {
+public class OrderController {
     List<Order> oderList = new ArrayList<Order>();
 }

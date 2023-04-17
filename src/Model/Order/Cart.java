@@ -1,4 +1,6 @@
-package Model;
+package Model.Order;
+
+import Model.Product.Product;
 
 public class Cart {
     protected Product productCart;

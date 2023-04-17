@@ -1,4 +1,4 @@
-package Model;
+package Model.Order;
 
 import java.util.ArrayList;
 import java.util.List;

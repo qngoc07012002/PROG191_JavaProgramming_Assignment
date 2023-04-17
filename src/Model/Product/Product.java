@@ -1,4 +1,4 @@
-package Model;
+package Model.Product;
 
 public class Product {
     protected String name;
