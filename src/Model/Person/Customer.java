@@ -15,9 +15,9 @@ public class Customer extends Person implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public Customer(String address, String phoneNumber) {
-        this.address = address;
-        this.phoneNumber = phoneNumber;
+
+    public Customer() {
+
     }
 
     public String getAddress() {

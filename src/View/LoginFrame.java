@@ -6,6 +6,12 @@ package View;
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
+import Controller.CustomerController;
+import Controller.StaffController;
+
+import javax.swing.*;
+import java.io.IOException;
+
 /**
  *
  * @author quang
@@ -15,8 +21,12 @@ public class LoginFrame extends javax.swing.JFrame {
     /**
      * Creates new form LoginFrame
      */
+    CustomerController customerController;
+    StaffController staffController;
     public LoginFrame() {
         initComponents();
+        customerController = new CustomerController();
+        staffController = new StaffController();
     }
 
     /**
@@ -34,13 +44,14 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        email = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        password = new javax.swing.JPasswordField();
         login = new javax.swing.JButton();
         register = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
+        checkAdmin = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Sign In");
@@ -110,22 +121,22 @@ public class LoginFrame extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setPreferredSize(new java.awt.Dimension(299, 380));
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        email.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                emailActionPerformed(evt);
             }
         });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel2.setText("username");
+        jLabel2.setText("email");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel3.setText("password");
 
-        jPasswordField1.setText("jPasswordField1");
-        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+        password.setText("jPasswordField1");
+        password.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordField1ActionPerformed(evt);
+                passwordActionPerformed(evt);
             }
         });
 
@@ -154,6 +165,8 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setIcon(new javax.swing.ImageIcon("C:\\Users\\quang\\OneDrive\\Documents\\NetBeansProjects\\test\\src\\main\\java\\images\\1.png")); // NOI18N
 
+        checkAdmin.setText("Admin");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -161,12 +174,13 @@ public class LoginFrame extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(43, 43, 43)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(checkAdmin)
                                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(jPasswordField1)
+                                                .addComponent(password)
                                                 .addComponent(jLabel3)
                                                 .addComponent(jLabel2)
-                                                .addComponent(jTextField1)
+                                                .addComponent(email)
                                                 .addGroup(jPanel2Layout.createSequentialGroup()
                                                         .addComponent(register, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
@@ -177,16 +191,18 @@ public class LoginFrame extends javax.swing.JFrame {
                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(24, 24, 24)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(11, 11, 11)
+                                .addComponent(checkAdmin)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(register, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(login, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -220,17 +236,42 @@ public class LoginFrame extends javax.swing.JFrame {
         System.exit(0);
     }
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void emailActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
     }
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        new MenuFrame().setVisible(true);
-        this.dispose();
+        if (!checkAdmin.isSelected()){ //Customer Login
+            char[] passwordChars = password.getPassword();
+            String password = new String(passwordChars);
+            try {
+                if (customerController.login(email.getText(),password)){
+                    new CustomerFrame().setVisible(true);
+                    this.dispose();} else JOptionPane.showMessageDialog(rootPane,"Wrong Email or Password");
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(rootPane,"Data not found!");
+            } catch (ClassNotFoundException e) {
+                JOptionPane.showMessageDialog(rootPane,e.getMessage());
+            }
+        } else { //Staff Login
+            char[] passwordChars = password.getPassword();
+            String password = new String(passwordChars);
+            try {
+                if (staffController.login(email.getText(),password)) {
+                    new MenuFrame().setVisible(true);
+                    this.dispose();
+                } else JOptionPane.showMessageDialog(rootPane,"Wrong Email or Password");
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(rootPane,"Data not found!");
+            } catch (ClassNotFoundException e) {
+                JOptionPane.showMessageDialog(rootPane,e.getMessage());
+            }
+
+        }
     }
 
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void passwordActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
     }
 
@@ -281,6 +322,8 @@ public class LoginFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify
+    private javax.swing.JCheckBox checkAdmin;
+    private javax.swing.JTextField email;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -289,10 +332,9 @@ public class LoginFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
     private keeptoo.KGradientPanel kGradientPanel1;
     private javax.swing.JButton login;
+    private javax.swing.JPasswordField password;
     private javax.swing.JButton register;
     // End of variables declaration
 }

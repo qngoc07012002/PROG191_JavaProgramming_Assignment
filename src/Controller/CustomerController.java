@@ -3,6 +3,7 @@ package Controller;
 import Model.Person.Customer;
 import Exception.EmailAlreadyUsedExeption;
 import Exception.InvalidEmailException;
+import Exception.InvalidPhoneNumber;
 
 
 import java.io.*;
@@ -27,13 +28,15 @@ public class CustomerController {
         return (ArrayList<Customer>) ois.readObject();
     }
 
-    public void addCustomer(Customer customer) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException {
+    public void addCustomer(Customer customer) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException, InvalidPhoneNumber {
         ArrayList<Customer> customers = readCustomer();
         customer.setID(customers.size()+1);
         if (checkValidEmail(customer.getEmail())) {
-            if (checkEmailAlreadyUsed(customer.getEmail())) {
-                customers.add(customer);
-            } else throw new EmailAlreadyUsedExeption("Email Already Used");
+            if (checkValidPhoneNumber(customer.getPhoneNumber())) {
+                if (checkEmailAlreadyUsed(customer.getEmail())) {
+                    customers.add(customer);
+                } else throw new EmailAlreadyUsedExeption("Email Already Used");
+            } else throw new InvalidPhoneNumber("Invalid Phone Number");
         } else throw new InvalidEmailException("Invalid Email");
         writeCustomer(customers);
     }
@@ -97,15 +100,15 @@ public class CustomerController {
     }
 
     public boolean register(String email, String password) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException {
-        boolean check = true;
+        boolean check = false;
         ArrayList<Customer> customers = readCustomer();
         //Check email valid
 
         if (checkValidEmail(email)) {
-//            if (!check) throw new AlreadyUsedRegisterExeption("User already Used");
-//            else {
-//                addCustomer(new Customer());
-//            }
+            if (checkEmailAlreadyUsed(email))
+            {
+                check = true;
+            } else throw new EmailAlreadyUsedExeption("Email Already Used");
         } else throw new InvalidEmailException("Invalid Email");
         return check;
     }
@@ -133,4 +136,23 @@ public class CustomerController {
          else check = false;
          return check;
     }
+
+    public boolean checkValidPhoneNumber(String phoneNumber){
+        boolean check = false;
+        var regex ="^(?:\\+84|0)(?:1\\d{9}|3\\d{8}|5\\d{8}|7\\d{8}|8\\d{8}|9\\d{8})$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(phoneNumber);
+        if (matcher.matches()) {
+            check = true;
+        }
+        else check = false;
+        return check;
+    }
+
+    public boolean checkValidSex(String sex){
+        if (sex.equals("Male") || sex.equals("Female")) return true;
+         else return false;
+    }
+
+
 }

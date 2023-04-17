@@ -7,6 +7,15 @@ package View;
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
+import Controller.CustomerController;
+import Controller.StaffController;
+
+import Exception.EmailAlreadyUsedExeption;
+import Exception.InvalidEmailException;
+
+import javax.swing.*;
+import java.io.IOException;
+
 /**
  *
  * @author quang
@@ -16,8 +25,12 @@ public class RegisterFrame extends javax.swing.JFrame {
     /**
      * Creates new form RegisterFrame
      */
+    CustomerController customerController; ;
+    StaffController staffController;
     public RegisterFrame() {
         initComponents();
+        customerController = new CustomerController();
+        staffController = new StaffController();
     }
 
     /**
@@ -35,15 +48,16 @@ public class RegisterFrame extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        email = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        password = new javax.swing.JPasswordField();
         register = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jPasswordField2 = new javax.swing.JPasswordField();
+        repassword = new javax.swing.JPasswordField();
         cancel = new javax.swing.JButton();
+        checkAdmin = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -110,22 +124,22 @@ public class RegisterFrame extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setPreferredSize(new java.awt.Dimension(299, 380));
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        email.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                emailActionPerformed(evt);
             }
         });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel2.setText("username");
+        jLabel2.setText("email");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel3.setText("password");
 
-        jPasswordField1.setText("jPasswordField1");
-        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+        password.setText("jPasswordField1");
+        password.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordField1ActionPerformed(evt);
+                passwordActionPerformed(evt);
             }
         });
 
@@ -147,7 +161,7 @@ public class RegisterFrame extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel6.setText("re-password");
 
-        jPasswordField2.setText("jPasswordField2");
+        repassword.setText("jPasswordField2");
 
         cancel.setBackground(new java.awt.Color(204, 255, 255));
         cancel.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
@@ -160,42 +174,53 @@ public class RegisterFrame extends javax.swing.JFrame {
             }
         });
 
+        checkAdmin.setText("Admin");
+        checkAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkAdminActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(43, 43, 43)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(register, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jPasswordField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jPasswordField2, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(checkAdmin)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                                        .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(register, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(password, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+                                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(email, javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(repassword, javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPasswordField2, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                                .addComponent(repassword, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                                .addGap(9, 9, 9)
+                                .addComponent(checkAdmin)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(register, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -230,16 +255,57 @@ public class RegisterFrame extends javax.swing.JFrame {
         System.exit(0);
     }
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void emailActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
     }
 
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void passwordActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
     }
 
     private void registerActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        char[] passwordChars = password.getPassword();
+        String passwordtext = new String(passwordChars);
+        char[] repasswordChars = repassword.getPassword();
+        String repasswordtext = new String(repasswordChars);
+        if (!passwordtext.equals(repasswordtext)) JOptionPane.showMessageDialog(rootPane,"Password Incorrect");
+        else {
+            if (checkAdmin.isSelected()){ //Staff Register
+
+                try {
+                    if (staffController.register(email.getText(),passwordtext)) {
+                        showMessage("Register Successful");
+                        new LoginFrame().setVisible(true);
+                        this.dispose();
+                    }
+                } catch (IOException e) {
+                    showMessage(e.getMessage());
+                } catch (ClassNotFoundException e) {
+                    showMessage(e.getMessage());
+                } catch (EmailAlreadyUsedExeption e) {
+                    showMessage(e.getMessage());
+                } catch (InvalidEmailException e) {
+                    showMessage(e.getMessage());
+                }
+            } else { //Customer Register
+                try {
+                    if (customerController.register(email.getText(),passwordtext)) {
+                        showMessage("Register Successful");
+                        new LoginFrame().setVisible(true);
+                        this.dispose();
+                    }
+                } catch (IOException e) {
+                    showMessage(e.getMessage());
+                } catch (ClassNotFoundException e) {
+                    showMessage(e.getMessage());
+                } catch (EmailAlreadyUsedExeption e) {
+                    showMessage(e.getMessage());
+                } catch (InvalidEmailException e) {
+                    showMessage(e.getMessage());
+                }
+            }
+        }
     }
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {
@@ -253,6 +319,12 @@ public class RegisterFrame extends javax.swing.JFrame {
         System.exit(0);
     }
 
+    private void checkAdminActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+    void showMessage(String msg){
+        JOptionPane.showMessageDialog(rootPane,msg);
+    }
     /**
      * @param args the command line arguments
      */
@@ -290,6 +362,8 @@ public class RegisterFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify
     private javax.swing.JButton cancel;
+    private javax.swing.JCheckBox checkAdmin;
+    private javax.swing.JTextField email;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -299,10 +373,9 @@ public class RegisterFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JPasswordField jPasswordField2;
-    private javax.swing.JTextField jTextField1;
     private keeptoo.KGradientPanel kGradientPanel1;
+    private javax.swing.JPasswordField password;
     private javax.swing.JButton register;
+    private javax.swing.JPasswordField repassword;
     // End of variables declaration
 }

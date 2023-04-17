@@ -16,5 +16,7 @@ public class Staff extends Person implements Serializable{
         this.role = role;
     }
 
-
+    public String getRole() {
+        return role;
+    }
 }
