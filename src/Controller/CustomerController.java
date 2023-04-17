@@ -3,7 +3,8 @@ package Controller;
 import Model.Person.Customer;
 import Exception.EmailAlreadyUsedExeption;
 import Exception.InvalidEmailException;
-import Exception.InvalidPhoneNumber;
+import Exception.InvalidAgeException;
+import Exception.InvalidPhoneNumberException;
 
 
 import java.io.*;
@@ -28,33 +29,38 @@ public class CustomerController {
         return (ArrayList<Customer>) ois.readObject();
     }
 
-    public void addCustomer(Customer customer) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException, InvalidPhoneNumber {
+    public void addCustomer(Customer customer) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException, InvalidPhoneNumberException {
         ArrayList<Customer> customers = readCustomer();
         customer.setID(customers.size()+1);
         if (checkValidEmail(customer.getEmail())) {
             if (checkValidPhoneNumber(customer.getPhoneNumber())) {
                 if (checkEmailAlreadyUsed(customer.getEmail())) {
                     customers.add(customer);
+                    writeCustomer(customers);
                 } else throw new EmailAlreadyUsedExeption("Email Already Used");
-            } else throw new InvalidPhoneNumber("Invalid Phone Number");
+            } else throw new InvalidPhoneNumberException("Invalid Phone Number");
         } else throw new InvalidEmailException("Invalid Email");
-        writeCustomer(customers);
+
     }
 
-    public void editCustomer(Customer customer) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException {
+    public void editCustomer(Customer customer) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException, InvalidAgeException, InvalidPhoneNumberException {
         ArrayList<Customer> customers = readCustomer();
         if (checkValidEmail(customer.getEmail())) {
-            if (checkEmailAlreadyUsed(customer.getEmail())) {
-                for (int i = 0; i < customers.size(); i++) {
-                    Customer ctm = customers.get(i);
-                    if (ctm.getID() == customer.getID()) {
-                        customers.set(i, customer);
-                        break;
-                    }
-                }
-            } else throw new EmailAlreadyUsedExeption("Email Already Used!");
+            if (checkValidAge(customer.getAge())) {
+                if (checkValidPhoneNumber(customer.getPhoneNumber())) {
+                    if (checkEmailAlreadyUsed(customer.getEmail())) {
+                        for (int i = 0; i < customers.size(); i++) {
+                            Customer ctm = customers.get(i);
+                            if (ctm.getID() == customer.getID()) {
+                                customers.set(i, customer);
+                                break;
+                            }
+                        }
+                        writeCustomer(customers);
+                    } else throw new EmailAlreadyUsedExeption("Email Already Used!");
+                }throw new InvalidPhoneNumberException("Invalid Phone Number");
+            } throw new InvalidAgeException("Invalid Age");
         } else throw new InvalidEmailException("Invalid Email");
-        writeCustomer(customers);
     }
 
     public void removeCustomer(int indexID) throws IOException, ClassNotFoundException {
@@ -91,6 +97,8 @@ public class CustomerController {
             Customer ctm = customers.get(i);
             if (ctm.getEmail().equals(email)) {
                 if (ctm.getPassword().equals(password)){
+                    SettingController settingController = new SettingController();
+                    settingController.writeProfile(ctm);
                     check = true;
                     break;
                 }
@@ -107,6 +115,8 @@ public class CustomerController {
         if (checkValidEmail(email)) {
             if (checkEmailAlreadyUsed(email))
             {
+                SettingController settingController = new SettingController();
+                settingController.writeProfile(new Customer("","","",email,password,"",""));
                 check = true;
             } else throw new EmailAlreadyUsedExeption("Email Already Used");
         } else throw new InvalidEmailException("Invalid Email");
@@ -133,8 +143,7 @@ public class CustomerController {
         if (matcher.matches()) {
             check = true;
         }
-         else check = false;
-         return check;
+        return check;
     }
 
     public boolean checkValidPhoneNumber(String phoneNumber){
@@ -145,14 +154,18 @@ public class CustomerController {
         if (matcher.matches()) {
             check = true;
         }
-        else check = false;
         return check;
     }
 
-    public boolean checkValidSex(String sex){
-        if (sex.equals("Male") || sex.equals("Female")) return true;
-         else return false;
+
+    public boolean checkValidAge(String age){
+        boolean check = false;
+        var regex ="^(1[0-2][0-9]|[1-9][0-9]|[1-9]|[1][3][0])$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(age);
+        if (matcher.matches()) {
+            check = true;
+        }
+        return check;
     }
-
-
 }

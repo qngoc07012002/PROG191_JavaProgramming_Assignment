@@ -12,6 +12,7 @@ import Controller.StaffController;
 
 import Exception.EmailAlreadyUsedExeption;
 import Exception.InvalidEmailException;
+import Model.Person.Customer;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -276,7 +277,7 @@ public class RegisterFrame extends javax.swing.JFrame {
                 try {
                     if (staffController.register(email.getText(),passwordtext)) {
                         showMessage("Register Successful");
-                        new LoginFrame().setVisible(true);
+                        new MenuFrame().setVisible(true);
                         this.dispose();
                     }
                 } catch (IOException e) {
@@ -292,7 +293,7 @@ public class RegisterFrame extends javax.swing.JFrame {
                 try {
                     if (customerController.register(email.getText(),passwordtext)) {
                         showMessage("Register Successful");
-                        new LoginFrame().setVisible(true);
+                        new CustomerFrame().setVisible(true);
                         this.dispose();
                     }
                 } catch (IOException e) {

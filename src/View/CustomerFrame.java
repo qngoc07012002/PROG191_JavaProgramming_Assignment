@@ -4,7 +4,13 @@
  */
 package View;
 
+import Controller.CustomerController;
+import Controller.SettingController;
+import Model.Person.Customer;
+
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import java.io.IOException;
 
 /**
  *
@@ -15,8 +21,19 @@ public class CustomerFrame extends javax.swing.JFrame {
     /**
      * Creates new form CustomerFrame
      */
+
+    CustomerController customerController;
+    SettingController settingController;
+
     public CustomerFrame() {
         initComponents();
+        productPanel.setVisible(false);
+        shoppingCartPanel.setVisible(false);
+        orderHistoryPanel.setVisible(false);
+        settingPanel.setVisible(true);
+        customerController = new CustomerController();
+        settingController = new SettingController();
+        loadSettingProfile();
     }
 
     /**
@@ -58,6 +75,28 @@ public class CustomerFrame extends javax.swing.JFrame {
         jScrollPane6 = new javax.swing.JScrollPane();
         orderHistoryTable = new javax.swing.JTable();
         jButton11 = new javax.swing.JButton();
+        settingPanel = new javax.swing.JPanel();
+        kGradientPanel5 = new com.k33ptoo.components.KGradientPanel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel39 = new javax.swing.JLabel();
+        phoneNumberProfile = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
+        addressProfile = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        emailProfile = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        boxSex = new javax.swing.JComboBox<>();
+        jLabel13 = new javax.swing.JLabel();
+        ageProfile = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        nameProfile = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        saveButton = new javax.swing.JButton();
+        currentPasswordProfile = new javax.swing.JPasswordField();
+        newPasswordProfile = new javax.swing.JPasswordField();
         menuCustomer = new com.k33ptoo.components.KGradientPanel();
         exit = new javax.swing.JLabel();
         productButton = new javax.swing.JPanel();
@@ -69,6 +108,9 @@ public class CustomerFrame extends javax.swing.JFrame {
         orderHistoryButton = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        settingButton = new javax.swing.JPanel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
         kButton1 = new com.k33ptoo.components.KButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -388,6 +430,160 @@ public class CustomerFrame extends javax.swing.JFrame {
                                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
+        settingPanel.setBackground(new java.awt.Color(255, 255, 255));
+        settingPanel.setPreferredSize(new java.awt.Dimension(870, 600));
+
+        kGradientPanel5.setkEndColor(new java.awt.Color(51, 255, 255));
+        kGradientPanel5.setkStartColor(new java.awt.Color(51, 102, 255));
+
+        jLabel11.setIcon(new javax.swing.ImageIcon("C:\\Users\\quang\\OneDrive\\Documents\\NetBeansProjects\\test\\src\\main\\java\\images\\1.png")); // NOI18N
+
+        jLabel38.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+        jLabel38.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel38.setText("home/setting");
+
+        jLabel39.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
+        jLabel39.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel39.setText("Setting");
+
+        javax.swing.GroupLayout kGradientPanel5Layout = new javax.swing.GroupLayout(kGradientPanel5);
+        kGradientPanel5.setLayout(kGradientPanel5Layout);
+        kGradientPanel5Layout.setHorizontalGroup(
+                kGradientPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, kGradientPanel5Layout.createSequentialGroup()
+                                .addGap(50, 50, 50)
+                                .addGroup(kGradientPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 323, Short.MAX_VALUE)
+                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(43, 43, 43))
+        );
+        kGradientPanel5Layout.setVerticalGroup(
+                kGradientPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(kGradientPanel5Layout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(jLabel38)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel39)
+                                .addContainerGap())
+        );
+
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel19.setText("Phone Number:");
+
+        jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel18.setText("Address:");
+
+        jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel17.setText("New Password:");
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel15.setText("Current Password:");
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel14.setText("Email:");
+
+        boxSex.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "FeMale" }));
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel13.setText("Sex:");
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel12.setText("Age:");
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel9.setText("Name:");
+
+        saveButton.setText("Save");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout settingPanelLayout = new javax.swing.GroupLayout(settingPanel);
+        settingPanel.setLayout(settingPanelLayout);
+        settingPanelLayout.setHorizontalGroup(
+                settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(settingPanelLayout.createSequentialGroup()
+                                .addComponent(kGradientPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(settingPanelLayout.createSequentialGroup()
+                                .addGap(165, 165, 165)
+                                .addGroup(settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(settingPanelLayout.createSequentialGroup()
+                                                .addGroup(settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(jLabel12)
+                                                        .addComponent(jLabel9)
+                                                        .addComponent(jLabel13)
+                                                        .addComponent(jLabel14)
+                                                        .addComponent(jLabel15)
+                                                        .addComponent(jLabel17)
+                                                        .addComponent(jLabel18))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(nameProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(ageProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(boxSex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(emailProfile)
+                                                        .addComponent(addressProfile)
+                                                        .addComponent(currentPasswordProfile)
+                                                        .addComponent(newPasswordProfile, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)))
+                                        .addGroup(settingPanelLayout.createSequentialGroup()
+                                                .addGap(17, 17, 17)
+                                                .addComponent(jLabel19)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(phoneNumberProfile)))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingPanelLayout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(saveButton)
+                                .addGap(391, 391, 391))
+        );
+        settingPanelLayout.setVerticalGroup(
+                settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(settingPanelLayout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(kGradientPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                                .addGroup(settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(nameProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel9))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(ageProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel12))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(boxSex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel13))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(emailProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel14))
+                                .addGap(18, 18, 18)
+                                .addGroup(settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel15)
+                                        .addComponent(currentPasswordProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel17)
+                                        .addComponent(newPasswordProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(12, 12, 12)
+                                .addGroup(settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel18)
+                                        .addComponent(addressProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(9, 9, 9)
+                                .addGroup(settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(phoneNumberProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel19))
+                                .addGap(34, 34, 34)
+                                .addComponent(saveButton)
+                                .addGap(99, 99, 99))
+        );
+
         javax.swing.GroupLayout mainCustomerLayout = new javax.swing.GroupLayout(mainCustomer);
         mainCustomer.setLayout(mainCustomerLayout);
         mainCustomerLayout.setHorizontalGroup(
@@ -403,6 +599,11 @@ public class CustomerFrame extends javax.swing.JFrame {
                                         .addGap(0, 0, Short.MAX_VALUE)
                                         .addComponent(orderHistoryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(mainCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(mainCustomerLayout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(settingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
         );
         mainCustomerLayout.setVerticalGroup(
                 mainCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -417,7 +618,14 @@ public class CustomerFrame extends javax.swing.JFrame {
                                         .addGap(0, 0, Short.MAX_VALUE)
                                         .addComponent(orderHistoryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(mainCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(mainCustomerLayout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(settingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
         );
+
+        settingPanel.getAccessibleContext().setAccessibleParent(settingPanel);
 
         menuCustomer.setkEndColor(new java.awt.Color(0, 0, 0));
         menuCustomer.setkStartColor(new java.awt.Color(102, 102, 102));
@@ -550,6 +758,46 @@ public class CustomerFrame extends javax.swing.JFrame {
                                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
+        settingButton.setOpaque(false);
+        settingButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                settingButtonMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                settingButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                settingButtonMouseExited(evt);
+            }
+        });
+
+        jLabel20.setIcon(new javax.swing.ImageIcon("C:\\Users\\quang\\OneDrive\\Documents\\NetBeansProjects\\test\\src\\main\\java\\images\\icons8_settings_24px.png")); // NOI18N
+
+        jLabel21.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setText("SETTING");
+
+        javax.swing.GroupLayout settingButtonLayout = new javax.swing.GroupLayout(settingButton);
+        settingButton.setLayout(settingButtonLayout);
+        settingButtonLayout.setHorizontalGroup(
+                settingButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(settingButtonLayout.createSequentialGroup()
+                                .addGap(36, 36, 36)
+                                .addComponent(jLabel20)
+                                .addGap(26, 26, 26)
+                                .addComponent(jLabel21)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        settingButtonLayout.setVerticalGroup(
+                settingButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(settingButtonLayout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addGroup(settingButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel21)
+                                        .addComponent(jLabel20))
+                                .addContainerGap(26, Short.MAX_VALUE))
+        );
+
         kButton1.setText("Logout");
         kButton1.setkBackGroundColor(new java.awt.Color(255, 0, 0));
         kButton1.setkEndColor(new java.awt.Color(153, 255, 255));
@@ -577,19 +825,22 @@ public class CustomerFrame extends javax.swing.JFrame {
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(kButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(14, 14, 14))
+                        .addComponent(settingButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         menuCustomerLayout.setVerticalGroup(
                 menuCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(menuCustomerLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(exit)
-                                .addGap(103, 103, 103)
+                                .addGap(79, 79, 79)
                                 .addComponent(productButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(shoppingCartButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(orderHistoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(settingButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
                                 .addComponent(kButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(15, 15, 15))
         );
@@ -654,20 +905,66 @@ public class CustomerFrame extends javax.swing.JFrame {
 
     private void productButtonMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
-        unDisplayAll();
-        productPanel.setVisible(true);
+
+        try {
+            if (settingController.checkVerifyProfile())
+            {
+                unDisplayAll();
+                productPanel.setVisible(true);
+            } else {
+                showMessage("You must setting your profile first!");
+                unDisplayAll();
+                loadSettingProfile();
+                settingPanel.setVisible(true);
+            }
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
+
     }
 
     private void shoppingCartButtonMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
-        unDisplayAll();
-        shoppingCartPanel.setVisible(true);
+
+        try {
+            if (settingController.checkVerifyProfile())
+            {
+                unDisplayAll();
+                shoppingCartPanel.setVisible(true);
+            } else {
+                showMessage("You must setting your profile first!");
+                unDisplayAll();
+                loadSettingProfile();
+                settingPanel.setVisible(true);
+            }
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     private void orderHistoryButtonMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
-        unDisplayAll();
-        orderHistoryPanel.setVisible(true);
+
+        try {
+            if (settingController.checkVerifyProfile())
+            {
+                unDisplayAll();
+                orderHistoryPanel.setVisible(true);
+            } else {
+                showMessage("You must setting your profile first!");
+                unDisplayAll();
+                loadSettingProfile();
+                settingPanel.setVisible(true);
+            }
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     private void kButton1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -675,6 +972,60 @@ public class CustomerFrame extends javax.swing.JFrame {
         new LoginFrame().setVisible(true);
         this.dispose();
     }
+
+    private void settingButtonMouseEntered(java.awt.event.MouseEvent evt) {
+        // TODO add your handling code here:
+        setColor(settingButton);
+    }
+
+    private void settingButtonMouseExited(java.awt.event.MouseEvent evt) {
+        // TODO add your handling code here:
+        resetColor(settingButton);
+    }
+
+    private void settingButtonMouseClicked(java.awt.event.MouseEvent evt) {
+        // TODO add your handling code here:
+        unDisplayAll();
+        loadSettingProfile();
+        settingPanel.setVisible(true);
+    }
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        String name = nameProfile.getText();
+        String age = ageProfile.getText();
+        String sex = (String) boxSex.getSelectedItem();
+        String email = emailProfile.getText();
+        char[] passwordChars = currentPasswordProfile.getPassword();
+        String currentPassword = new String(passwordChars);
+        char[] newpasswordChars = newPasswordProfile.getPassword();
+        String newPassword = new String(newpasswordChars);
+        String address = addressProfile.getText();
+        String phoneNumber = phoneNumberProfile.getText();
+        showMessage(currentPassword+" "+newPassword);
+        if (currentPassword.equals("")) showMessage("You have to Enter Current Password");
+        else
+            try {
+                Customer customer = (Customer) settingController.readProfile();
+                if (customer.getPassword().equals(currentPassword)){
+                    if (!newPassword.equals("")){
+                        settingController.writeProfile(new Customer(name,age,sex,email,newPassword,address,phoneNumber));
+                        showMessage("Save Successful");
+                    } else {
+                        settingController.writeProfile(new Customer(name,age,sex,email,customer.getPassword(),address,phoneNumber));
+                        showMessage("Save Successful");
+                    }
+                } else showMessage("Wrong Current Password");
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+
+    }
+
     public void setColor(JPanel panel){
         panel.setOpaque(true);
         panel.setBackground(new java.awt.Color(47, 47, 47));
@@ -688,6 +1039,30 @@ public class CustomerFrame extends javax.swing.JFrame {
         productPanel.setVisible(false);
         shoppingCartPanel.setVisible(false);
         orderHistoryPanel.setVisible(false);
+        settingPanel.setVisible(false);
+    }
+
+    public void loadSettingProfile(){
+        try {
+            Customer customer = (Customer) settingController.readProfile();
+            nameProfile.setText(customer.getName());
+            ageProfile.setText(customer.getAge());
+            boxSex.setSelectedItem(customer.getSex());
+            emailProfile.setText(customer.getEmail());
+            currentPasswordProfile.setText("");
+            newPasswordProfile.setText("");
+            addressProfile.setText(customer.getAddress());
+            phoneNumberProfile.setText(customer.getPhoneNumber());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    void showMessage(String msg){
+        JOptionPane.showMessageDialog(rootPane, msg);
     }
     /**
      * @param args the command line arguments
@@ -700,7 +1075,7 @@ public class CustomerFrame extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Metal".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -720,12 +1095,18 @@ public class CustomerFrame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new CustomerFrame().setVisible(true);
+
             }
         });
     }
 
     // Variables declaration - do not modify
     private javax.swing.JButton addToCart;
+    private javax.swing.JTextField addressProfile;
+    private javax.swing.JTextField ageProfile;
+    private javax.swing.JComboBox<String> boxSex;
+    private javax.swing.JPasswordField currentPasswordProfile;
+    private javax.swing.JTextField emailProfile;
     private javax.swing.JLabel exit;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton11;
@@ -734,8 +1115,18 @@ public class CustomerFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
@@ -743,11 +1134,14 @@ public class CustomerFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane6;
@@ -756,14 +1150,21 @@ public class CustomerFrame extends javax.swing.JFrame {
     private com.k33ptoo.components.KGradientPanel kGradientPanel1;
     private com.k33ptoo.components.KGradientPanel kGradientPanel2;
     private com.k33ptoo.components.KGradientPanel kGradientPanel4;
+    private com.k33ptoo.components.KGradientPanel kGradientPanel5;
     private javax.swing.JPanel mainCustomer;
     private com.k33ptoo.components.KGradientPanel menuCustomer;
+    private javax.swing.JTextField nameProfile;
+    private javax.swing.JPasswordField newPasswordProfile;
     private javax.swing.JPanel orderHistoryButton;
     private javax.swing.JPanel orderHistoryPanel;
     private javax.swing.JTable orderHistoryTable;
+    private javax.swing.JTextField phoneNumberProfile;
     private javax.swing.JPanel productButton;
     private javax.swing.JPanel productPanel;
     private javax.swing.JTable productTable;
+    private javax.swing.JButton saveButton;
+    private javax.swing.JPanel settingButton;
+    private javax.swing.JPanel settingPanel;
     private javax.swing.JPanel shoppingCartButton;
     private javax.swing.JPanel shoppingCartPanel;
     private javax.swing.JTable shoppingCartTable;

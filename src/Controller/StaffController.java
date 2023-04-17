@@ -6,6 +6,7 @@ import Model.Person.Customer;
 import Model.Person.Staff;
 
 import Exception.InvalidEmailException;
+import Exception.InvalidAgeException;
 import Exception.EmailAlreadyUsedExeption;
 
 import java.io.*;
@@ -31,31 +32,37 @@ public class StaffController {
         return (ArrayList<Staff>) ois.readObject();
     }
 
-    public void addStaff(Staff staff) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException {
+    public void addStaff(Staff staff) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException, InvalidAgeException {
         ArrayList<Staff> staffs = readStaff();
         staff.setID(staffs.size()+1);
         if (checkValidEmail(staff.getEmail())) {
-            if (checkEmailAlreadyUsed(staff.getEmail())) {
-                staffs.add(staff);
-            } else throw new EmailAlreadyUsedExeption("Email Already Used");
+           if (checkValidAge(staff.getAge())) {
+               if (checkEmailAlreadyUsed(staff.getEmail())) {
+                   staffs.add(staff);
+                   writeStaff(staffs);
+               } else throw new EmailAlreadyUsedExeption("Email Already Used");
+           }else throw new InvalidAgeException("Invalid Age");
         } else throw new InvalidEmailException("Invalid Email");
-        writeStaff(staffs);
+
     }
 
-    public void editStaff(Staff staff) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException {
+    public void editStaff(Staff staff) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException, InvalidAgeException {
         ArrayList<Staff> staffs = readStaff();
         if (checkValidEmail(staff.getEmail())) {
-            if (checkEmailAlreadyUsed(staff.getEmail())) {
-                for (int i = 0; i < staffs.size(); i++) {
-                    Staff stf = staffs.get(i);
-                    if (stf.getID() == staff.getID()) {
-                        staffs.set(i, staff);
-                        break;
+            if (checkValidAge(staff.getAge())) {
+                if (checkEmailAlreadyUsed(staff.getEmail())) {
+                    for (int i = 0; i < staffs.size(); i++) {
+                        Staff stf = staffs.get(i);
+                        if (stf.getID() == staff.getID()) {
+                            staffs.set(i, staff);
+                            break;
+                        }
                     }
-                }
-            } else throw new EmailAlreadyUsedExeption("Email Already Used!");
+                    writeStaff(staffs);
+                } else throw new EmailAlreadyUsedExeption("Email Already Used!");
+            } else throw new InvalidAgeException("Invalid Age");
         } else throw new InvalidEmailException("Invalid Email");
-        writeStaff(staffs);
+
     }
 
     public void removeStaff(int indexID) throws IOException, ClassNotFoundException {
@@ -79,6 +86,8 @@ public class StaffController {
             Staff stf = staffs.get(i);
             if (stf.getEmail().equals(email)) {
                 if (stf.getPassword().equals(password)){
+                    SettingController settingController = new SettingController();
+                    settingController.writeProfile(stf);
                     check = true;
                     break;
                 }
@@ -124,24 +133,18 @@ public class StaffController {
         if (matcher.matches()) {
             check = true;
         }
-        else check = false;
         return check;
     }
 
-    public boolean checkValidPhoneNumber(String phoneNumber){
+
+    public boolean checkValidAge(String age){
         boolean check = false;
-        var regex ="^(?:\\+84|0)(?:1\\d{9}|3\\d{8}|5\\d{8}|7\\d{8}|8\\d{8}|9\\d{8})$";
+        var regex ="^(1[0-2][0-9]|[1-9][0-9]|[1-9]|[1][3][0])$";
         Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(phoneNumber);
+        Matcher matcher = pattern.matcher(age);
         if (matcher.matches()) {
             check = true;
         }
-        else check = false;
         return check;
-    }
-
-    public boolean checkValidSex(String sex){
-        if (sex.equals("Male") || sex.equals("Female")) return true;
-        else return false;
     }
 }

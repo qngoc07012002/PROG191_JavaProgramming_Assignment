@@ -3,20 +3,15 @@ import Controller.SettingController;
 import Controller.StaffController;
 import Model.Person.Customer;
 import Model.Person.Staff;
-import Model.Person.Person;
 import Exception.EmailAlreadyUsedExeption;
 import Exception.InvalidEmailException;
-import Exception.InvalidPhoneNumber;
-import View.CustomerFrame;
-import View.MenuFrame;
+import Exception.InvalidAgeException;
+import Exception.InvalidPhoneNumberException;
+import View.LoginFrame;
 
-import javax.swing.*;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -38,10 +33,11 @@ public class Main {
         StaffController staffController = new StaffController();
         CustomerController customerController = new CustomerController();
         SettingController settingController = new SettingController();
+
         try {
             ArrayList<Customer> customerList = new ArrayList<>();
             customerController.writeCustomer(customerList);
-            Customer customer1 = new Customer("Nguyen Quang Ngoc","20","Male","test@gmail.com","test","ABC","312321");
+            Customer customer1 = new Customer("Nguyen Quang Ngoc","130","FeMale","test@gmail.com","test","ABC","0848448873");
             Customer customer2 = new Customer("Phuc","20","FeMale","2@gmail.com","1224","ABC","312321");
             Customer customer3 = new Customer("Nguyen Tien Dung","20","FeMale","3@gmail.com","1224","ABC","312321");
             Customer customer4 = new Customer("Nguyen Quang Ngoc","20","Male","4@gmail.com","1224","ABC","312321");
@@ -54,18 +50,22 @@ public class Main {
             customerList.add(customer5);
             customerList.add(customer6);
             customerController.addCustomer(customer1);
-            customerController.addCustomer(customer2);
-            customerController.addCustomer(customer3);
-            customerController.addCustomer(customer4);
-            customerController.addCustomer(customer5);
-            customerController.addCustomer(customer6);
+
+
+//            customerController.addCustomer(customer2);
+//            customerController.addCustomer(customer3);
+//            customerController.addCustomer(customer4);
+//            customerController.addCustomer(customer5);
+//            customerController.addCustomer(customer6);
 
             ArrayList<Staff> staffList = new ArrayList<>();
             staffController.writeStaff(staffList);
             staffController.addStaff(staff1);
-            staffController.addStaff(staff2);
+//            staffController.addStaff(staff2);
 
-            settingController.writeProfile(staff1);
+
+
+            settingController.writeProfile(new Customer("","","","test1@gmail.com","test","",""));
             //staffController.writeStaff(staffList);
 //            Customer editCustomer =new Customer("Ngoc Ahihi","20","FEEEEMaleEEE","@gmail.com","1224","ABC","312321"); //Test edit
 //            customerController.editCustomer(editCustomer);
@@ -82,22 +82,25 @@ public class Main {
             System.out.println(e.getMessage());
         } catch (InvalidEmailException e) {
             System.out.println(e.getMessage());
-        } catch (InvalidPhoneNumber e) {
+        } catch (InvalidPhoneNumberException e) {
+            System.out.println(e.getMessage());
+        } catch (InvalidAgeException e) {
             System.out.println(e.getMessage());
         }
 
         try {
            ArrayList<Customer> customers = customerController.readCustomer();
            for (Customer customer : customers){
-               System.out.println(customer.getEmail()+" "+customer.getPassword());
+               System.out.println(customer.getEmail()+" "+customer.getPhoneNumber());
            }
            ArrayList<Staff> staffs = staffController.readStaff();
            for (Staff staff : staffs){
                System.out.println(staff.getID()+" "+staff.getEmail());
            }
 
-           Staff person = (Staff) settingController.readProfile();
-            System.out.println(person.getRole());
+
+
+       System.out.println(settingController.checkVerifyProfile());
 
         } catch (ClassNotFoundException e){
             e.printStackTrace();
@@ -134,5 +137,8 @@ public class Main {
 //            }
 //
 //        }
+
+
+
     }
 }
