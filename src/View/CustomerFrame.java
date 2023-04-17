@@ -12,6 +12,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.io.IOException;
 
+import Exception.InvalidAgeException;
+import Exception.InvalidPhoneNumberException;
+import Exception.PhoneNumberAlreadyUsedException;
+import Exception.EmailAlreadyUsedExeption;
+import Exception.InvalidEmailException;
 /**
  *
  * @author quang
@@ -1002,25 +1007,46 @@ public class CustomerFrame extends javax.swing.JFrame {
         String newPassword = new String(newpasswordChars);
         String address = addressProfile.getText();
         String phoneNumber = phoneNumberProfile.getText();
-        showMessage(currentPassword+" "+newPassword);
+
         if (currentPassword.equals("")) showMessage("You have to Enter Current Password");
         else
             try {
                 Customer customer = (Customer) settingController.readProfile();
                 if (customer.getPassword().equals(currentPassword)){
+                    customer.setName(name); customer.setAge(age); customer.setSex(sex); customer.setEmail(email);
+                    customer.setAddress(address); customer.setPhoneNumber(phoneNumber);
                     if (!newPassword.equals("")){
-                        settingController.writeProfile(new Customer(name,age,sex,email,newPassword,address,phoneNumber));
-                        showMessage("Save Successful");
+                        customer.setPassword(newPassword);
                     } else {
-                        settingController.writeProfile(new Customer(name,age,sex,email,customer.getPassword(),address,phoneNumber));
+                        customer.setPassword(currentPassword);
+                    }
+                    if (settingController.saveProfile(customer)) {
+                        customer = (Customer) settingController.readProfile();
+                        if (settingController.checkVerifyProfile()) {
+                            if (customer.getID() == 0) customerController.addCustomer(customer);
+                            else customerController.editCustomer(customer);
+
+                        }
                         showMessage("Save Successful");
                     }
+                     else showMessage("UnSuccessful");
+
                 } else showMessage("Wrong Current Password");
 
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                showMessage(e.getMessage());
             } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
+                showMessage(e.getMessage());
+            } catch (InvalidAgeException e) {
+                showMessage(e.getMessage());
+            } catch (InvalidPhoneNumberException e) {
+                showMessage(e.getMessage());
+            } catch (PhoneNumberAlreadyUsedException e) {
+                showMessage(e.getMessage());
+            } catch (EmailAlreadyUsedExeption e) {
+                showMessage(e.getMessage());
+            } catch (InvalidEmailException e) {
+                showMessage(e.getMessage());
             }
 
 
@@ -1055,9 +1081,9 @@ public class CustomerFrame extends javax.swing.JFrame {
             phoneNumberProfile.setText(customer.getPhoneNumber());
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            showMessage(e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            showMessage(e.getMessage());
         }
 
     }

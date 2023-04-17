@@ -5,8 +5,10 @@ import Exception.EmailAlreadyUsedExeption;
 import Exception.InvalidEmailException;
 import Exception.InvalidAgeException;
 import Exception.InvalidPhoneNumberException;
+import Exception.PhoneNumberAlreadyUsedException;
 
 
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -29,37 +31,46 @@ public class CustomerController {
         return (ArrayList<Customer>) ois.readObject();
     }
 
-    public void addCustomer(Customer customer) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException, InvalidPhoneNumberException {
+    public void addCustomer(Customer customer) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException, InvalidPhoneNumberException, InvalidAgeException, PhoneNumberAlreadyUsedException {
         ArrayList<Customer> customers = readCustomer();
         customer.setID(customers.size()+1);
-        if (checkValidEmail(customer.getEmail())) {
-            if (checkValidPhoneNumber(customer.getPhoneNumber())) {
-                if (checkEmailAlreadyUsed(customer.getEmail())) {
-                    customers.add(customer);
-                    writeCustomer(customers);
-                } else throw new EmailAlreadyUsedExeption("Email Already Used");
-            } else throw new InvalidPhoneNumberException("Invalid Phone Number");
-        } else throw new InvalidEmailException("Invalid Email");
-
-    }
-
-    public void editCustomer(Customer customer) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException, InvalidAgeException, InvalidPhoneNumberException {
-        ArrayList<Customer> customers = readCustomer();
         if (checkValidEmail(customer.getEmail())) {
             if (checkValidAge(customer.getAge())) {
                 if (checkValidPhoneNumber(customer.getPhoneNumber())) {
                     if (checkEmailAlreadyUsed(customer.getEmail())) {
-                        for (int i = 0; i < customers.size(); i++) {
-                            Customer ctm = customers.get(i);
-                            if (ctm.getID() == customer.getID()) {
-                                customers.set(i, customer);
-                                break;
+                        if (checkPhoneAlreadyUsed(customer.getPhoneNumber())) {
+                            customers.add(customer);
+                            writeCustomer(customers);
+
+                        } else throw new PhoneNumberAlreadyUsedException("Phone Already Used");
+                    } else throw new EmailAlreadyUsedExeption("Email Already Used");
+                } else throw new InvalidPhoneNumberException("Invalid Phone Number");
+            } else throw new InvalidAgeException("Invalid Age");
+        } else throw new InvalidEmailException("Invalid Email");
+
+    }
+
+    public void editCustomer(Customer customer) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException, InvalidAgeException, InvalidPhoneNumberException, PhoneNumberAlreadyUsedException {
+        ArrayList<Customer> customers = readCustomer();
+        if (checkValidEmail(customer.getEmail())) {
+            if (checkValidAge(customer.getAge())) {
+                if (checkValidPhoneNumber(customer.getPhoneNumber())) {
+                    if (checkEmailAlreadyUsedEdit(customer)) {
+                        if (checkPhoneAlreadyUsedEdit(customer)) {
+                            for (int i = 0; i < customers.size(); i++) {
+                                Customer ctm = customers.get(i);
+                                if (ctm.getID() == customer.getID()) {
+
+                                    customers.set(i, customer);
+
+                                    break;
+                                }
                             }
-                        }
-                        writeCustomer(customers);
+                            writeCustomer(customers);
+                        } else throw new PhoneNumberAlreadyUsedException("Phone Number Already Used");
                     } else throw new EmailAlreadyUsedExeption("Email Already Used!");
-                }throw new InvalidPhoneNumberException("Invalid Phone Number");
-            } throw new InvalidAgeException("Invalid Age");
+                }else throw new InvalidPhoneNumberException("Invalid Phone Number");
+            } else throw new InvalidAgeException("Invalid Age");
         } else throw new InvalidEmailException("Invalid Email");
     }
 
@@ -135,6 +146,46 @@ public class CustomerController {
         return check;
     }
 
+    public boolean checkEmailAlreadyUsedEdit(Customer customer) throws IOException, ClassNotFoundException {
+        boolean check = true;
+        ArrayList<Customer> customers = readCustomer();
+        for (Customer ctm : customers) {
+            if (ctm.getID() != customer.getID()) {
+                if (ctm.getEmail().equals(customer.getEmail())) {
+                    check = false;
+                    break;
+                }
+            }
+        }
+        return check;
+    }
+
+    public boolean checkPhoneAlreadyUsedEdit(Customer customer) throws IOException, ClassNotFoundException {
+        boolean check = true;
+        ArrayList<Customer> customers = readCustomer();
+        for (Customer ctm : customers) {
+            if (ctm.getID() != customer.getID()) {
+                if (ctm.getPhoneNumber().equals(customer.getPhoneNumber())) {
+                    check = false;
+                    break;
+                }
+            }
+        }
+        return check;
+    }
+
+    public boolean checkPhoneAlreadyUsed(String phoneNumber) throws IOException, ClassNotFoundException {
+        boolean check = true;
+        ArrayList<Customer> customers = readCustomer();
+        for (Customer ctm : customers) {
+            if (ctm.getEmail().equals(phoneNumber)){
+                check = false;
+                break;
+            }
+        }
+        return check;
+    }
+
     public boolean checkValidEmail(String email) {
         boolean check = false;
         var regex ="^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
@@ -148,7 +199,7 @@ public class CustomerController {
 
     public boolean checkValidPhoneNumber(String phoneNumber){
         boolean check = false;
-        var regex ="^(?:\\+84|0)(?:1\\d{9}|3\\d{8}|5\\d{8}|7\\d{8}|8\\d{8}|9\\d{8})$";
+        var regex ="^[0-9\\-\\+]{9,15}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(phoneNumber);
         if (matcher.matches()) {

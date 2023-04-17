@@ -4,21 +4,25 @@ import Model.Person.Customer;
 import Model.Person.Person;
 import Model.Person.Staff;
 
-import Exception.EmailAlreadyUsedExeption;
-import Exception.InvalidEmailException;
+
 import Exception.InvalidAgeException;
 import Exception.InvalidPhoneNumberException;
+import Exception.PhoneNumberAlreadyUsedException;
+import Exception.EmailAlreadyUsedExeption;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SettingController {
-
+    CustomerController customerController;
+    StaffController staffController;
 
     public SettingController(){
-
+        customerController = new CustomerController();
+        staffController = new StaffController();
     }
 
     public void writeProfile(Person person) throws IOException {
@@ -36,11 +40,27 @@ public class SettingController {
         return (Person) ois.readObject();
     }
 
-    public void saveProfile(Person person) {
+    public boolean saveProfile(Person person) throws InvalidAgeException, IOException, InvalidPhoneNumberException, ClassNotFoundException, PhoneNumberAlreadyUsedException, EmailAlreadyUsedExeption {
         if (person.getClass().getSimpleName().equals("Staff")){
-
+            Staff staff = (Staff) person;
+            if (checkValidAge(staff.getAge())){
+                if (checkEmailAlreadyUsedStaff(staff)) {
+                    writeProfile(staff);
+                    return true;
+                } throw new EmailAlreadyUsedExeption("Email Already Used");
+            } else throw new InvalidAgeException("Invalid Age");
         } else {
-
+            Customer customer = (Customer) person;
+            if (checkValidAge(customer.getAge())){
+                if (checkValidPhoneNumber(customer.getPhoneNumber())){
+                    if (checkPhoneAlreadyUsed(customer)) {
+                        if (checkEmailAlreadyUsedCustomer(customer)) {
+                            writeProfile(customer);
+                            return true;
+                        } throw new EmailAlreadyUsedExeption("Email Already Used");
+                    } else throw new PhoneNumberAlreadyUsedException("Phone Already Used");
+                } else throw new InvalidPhoneNumberException("Invalid Phone Number");
+            } else throw new InvalidAgeException("Invalid Age");
         }
     }
 
@@ -59,17 +79,48 @@ public class SettingController {
         }
     }
 
-
-    public boolean checkValidEmail(String email) {
-        boolean check = false;
-        var regex ="^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(email);
-        if (matcher.matches()) {
-            check = true;
+    public boolean checkEmailAlreadyUsedStaff(Staff staff) throws IOException, ClassNotFoundException {
+        boolean check = true;
+        ArrayList<Staff> staffs = staffController.readStaff();
+        for (Staff stf : staffs) {
+            if (stf.getID() != staff.getID()) {
+                if (stf.getEmail().equals(staff.getEmail())) {
+                    check = false;
+                    break;
+                }
+            }
         }
         return check;
     }
+
+    public boolean checkEmailAlreadyUsedCustomer(Customer customer) throws IOException, ClassNotFoundException {
+        boolean check = true;
+        ArrayList<Customer> customers = customerController.readCustomer();
+        for (Customer ctm : customers) {
+            if (ctm.getID() != customer.getID()) {
+                if (ctm.getEmail().equals(customer.getEmail())) {
+                    check = false;
+                    break;
+                }
+            }
+        }
+        return check;
+    }
+
+    public boolean checkPhoneAlreadyUsed(Customer customer) throws IOException, ClassNotFoundException {
+        boolean check = true;
+        ArrayList<Customer> customers = customerController.readCustomer();
+        for (Customer ctm : customers) {
+            if (ctm.getID() != customer.getID()) {
+                if (ctm.getPhoneNumber().equals(customer.getPhoneNumber())) {
+                    check = false;
+                    break;
+                }
+            }
+        }
+        return check;
+    }
+
 
     public boolean checkValidPhoneNumber(String phoneNumber){
         boolean check = false;

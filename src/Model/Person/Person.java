@@ -3,7 +3,7 @@ package Model.Person;
 import java.io.Serializable;
 
 public abstract class Person implements Serializable {
-    protected int ID;
+    protected int ID =0;
     protected String name;
     protected String age;
     protected String sex;
@@ -24,6 +24,26 @@ public abstract class Person implements Serializable {
 
     public void setID(int ID) {
         this.ID = ID;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getID() {

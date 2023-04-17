@@ -50,7 +50,7 @@ public class StaffController {
         ArrayList<Staff> staffs = readStaff();
         if (checkValidEmail(staff.getEmail())) {
             if (checkValidAge(staff.getAge())) {
-                if (checkEmailAlreadyUsed(staff.getEmail())) {
+                if (checkEmailAlreadyUsedEdit(staff)) {
                     for (int i = 0; i < staffs.size(); i++) {
                         Staff stf = staffs.get(i);
                         if (stf.getID() == staff.getID()) {
@@ -120,6 +120,20 @@ public class StaffController {
             if (stf.getEmail().equals(email)){
                 check = false;
                 break;
+            }
+        }
+        return check;
+    }
+
+    public boolean checkEmailAlreadyUsedEdit(Staff staff) throws IOException, ClassNotFoundException {
+        boolean check = true;
+        ArrayList<Staff> staffs = readStaff();
+        for (Staff stf : staffs) {
+            if (stf.getID() != stf.getID()) {
+                if (staff.getEmail().equals(staff.getEmail())) {
+                    check = false;
+                    break;
+                }
             }
         }
         return check;
