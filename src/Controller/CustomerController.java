@@ -87,6 +87,17 @@ public class CustomerController {
         writeCustomer(customers);
     }
 
+    public Customer returnCustomerbyID(int ID) throws IOException, ClassNotFoundException {
+        Customer customer = new Customer();
+        ArrayList<Customer> customers = readCustomer();
+        for(Customer ctm : customers){
+            if (ctm.getID() == ID){
+                customer = ctm;
+            }
+        }
+        return customer;
+    }
+
     public ArrayList<Customer> findByName(String name) throws IOException, ClassNotFoundException {
         ArrayList<Customer> customers = readCustomer();
         ArrayList<Customer> resultList = new ArrayList<>();

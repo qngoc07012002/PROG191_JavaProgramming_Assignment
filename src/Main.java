@@ -1,11 +1,14 @@
-import Controller.CustomerController;
-import Controller.ProductController;
-import Controller.SettingController;
-import Controller.StaffController;
+import Controller.*;
+import Model.Order.Cart;
+import Model.Order.Order;
+import Model.Person.Customer;
 import Model.Person.Staff;
 import Exception.InvalidExpProductException;
 import Exception.InvalidPriceProductException;
 import Exception.InvalidQuantityProductException;
+import Exception.EmailAlreadyUsedExeption;
+import Exception.InvalidEmailException;
+import Exception.InvalidAgeException;
 import Model.Product.Drink;
 import Model.Product.Food;
 import Model.Product.Product;
@@ -22,8 +25,9 @@ public class Main {
         int year = calendar.get(Calendar.YEAR);
         System.out.println(day+" "+month+" "+year);
 
-        Staff staff1 = new Staff("Ngoc","20","Male","admin@gmail.com","admin","Admin");
-        Staff staff2 = new Staff("Phuc","20","Female","ngoc@gmail.com","12345","Admin");
+        Staff staff1 = new Staff("Ngoc","20","Male","admin@gmail.com","admin");
+        staff1.setRole("ADMIN");
+        Staff staff2 = new Staff("Phuc","20","Female","ngoc@gmail.com","admin");
 //        String name = staff1.getClass().getSimpleName(); //Get class name
 //        System.out.println(name);
 
@@ -34,6 +38,7 @@ public class Main {
         StaffController staffController = new StaffController();
         CustomerController customerController = new CustomerController();
         SettingController settingController = new SettingController();
+        OrderController orderController = new OrderController();
 
 //        try {
 //            ArrayList<Customer> customerList = new ArrayList<>();
@@ -81,33 +86,33 @@ public class Main {
 //            System.out.println(e.getMessage());
 //        } catch (InvalidEmailException e) {
 //            System.out.println(e.getMessage());
-//        } catch (InvalidPhoneNumberException e) {
-//            System.out.println(e.getMessage());
+////        } catch (InvalidPhoneNumberException e) {
+////            System.out.println(e.getMessage());
 //        } catch (InvalidAgeException e) {
 //            System.out.println(e.getMessage());
-//        } catch (PhoneNumberAlreadyUsedException e) {
+     // } //catch (PhoneNumberAlreadyUsedException e) {
 //            System.out.println(e.getMessage());
 //        }
 
-//        try {
-//           ArrayList<Customer> customers = customerController.readCustomer();
+        try {
+           ArrayList<Customer> customers = customerController.readCustomer();
 //           for (Customer customer : customers){
 //               System.out.println(customer.getID()+" "+customer.getPhoneNumber());
 //           }
-//           ArrayList<Staff> staffs = staffController.readStaff();
-//           for (Staff staff : staffs){
-//               System.out.println(staff.getID()+" "+staff.getEmail());
-//           }
+           ArrayList<Staff> staffs = staffController.readStaff();
+           for (Staff staff : staffs){
+               System.out.println(staff.getID()+" "+staff.getEmail());
+           }
 
 
 
-//       System.out.println(settingController.checkVerifyProfile());
-//
-//        } catch (ClassNotFoundException e){
-//            e.printStackTrace();
-//        } catch (IOException e){
-//            e.printStackTrace();
-//        }
+
+
+        } catch (ClassNotFoundException e){
+            e.printStackTrace();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
 
 //        if (!checkAdmin.isSelected()){ //Customer Login
 //            String email = username.getText();
@@ -138,41 +143,61 @@ public class Main {
 //            }
 //
 //        }
-
+        CartController cartController = new CartController();
         ProductController productController = new ProductController();
         ArrayList<Product> products = new ArrayList<Product>();
-//        productController.writeProduct(products);
-//        Drink drink1 = new Drink("Sting",2.3,10,"20/10/2023");
-//        Drink drink2 = new Drink("CocaCola",3,15,"20/11/2023");
-//        Food food1 = new Food("Banh Mi",1,20,"15/3/2023");
-//        Food food2 = new Food("BimBim",1.2,30,"15/4/2023");
+        productController.writeProduct(products);
+        Drink drink1 = new Drink("Sting",2.3,10,"20/10/2023");
+        Drink drink2 = new Drink("CocaCola",3,15,"20/11/2023");
+        Food food1 = new Food("Banh Mi",1,20,"15/3/2023");
+        Food food2 = new Food("BimBim",1.2,30,"15/4/2023");
+        try {
+            productController.addProduct(drink1);
+            productController.addProduct(drink2);
+            productController.addProduct(food1);
+            productController.addProduct(food2);
+        } catch (ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (InvalidPriceProductException e) {
+            System.out.println(e.getMessage());
+        } catch (InvalidQuantityProductException e) {
+            System.out.println(e.getMessage());
+        } catch (InvalidExpProductException e) {
+            System.out.println(e.getMessage());
+        }
+
 //        try {
-//            productController.addProduct(drink1);
-//            productController.addProduct(drink2);
-//            productController.addProduct(food1);
-//            productController.addProduct(food2);
+////            products = productController.readProduct();
+////            for (Product prd : products){
+////                System.out.println(prd.getID()+" "+prd.getName());
+////            }
+//
+//            Cart cart = cartController.readCart();
+//            ArrayList<Product> prds = cart.getProductCart();
+//            for (Product prd: prds){
+//                System.out.println(prd.getName()+" "+prd.getQuantity()+" "+prd.getPrice());
+//            }
 //        } catch (ClassNotFoundException e) {
-//            System.out.println(e.getMessage());
-//        } catch (InvalidPriceProductException e) {
-//            System.out.println(e.getMessage());
-//        } catch (InvalidQuantityProductException e) {
-//            System.out.println(e.getMessage());
-//        } catch (InvalidExpProductException e) {
-//            System.out.println(e.getMessage());
+//            throw new RuntimeException(e);
 //        }
+        ArrayList<Order> orders = new ArrayList<>();
+        orderController.writeOrder(orders);
+        Order order = new Order(new Customer(),new Cart(),2000);
 
         try {
-            products = productController.readProduct();
-            for (Product prd : products){
-                System.out.println(prd.getID()+" "+prd.getName());
-            }
-
-            products = productController.findByName("B");
-            for (Product prd : products){
-                System.out.println(prd.getID()+" "+prd.getName());
+            orderController.addOrder(order);
+        } catch (ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (InvalidPriceProductException e) {
+            System.out.println(e.getMessage());
+        }
+        try {
+            orders = orderController.readOrder();
+            for (Order ord : orders){
+                System.out.println(ord.getID()+" "+ord.getTotalPrice());
             }
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
     }
 }

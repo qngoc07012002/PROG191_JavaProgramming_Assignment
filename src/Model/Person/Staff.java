@@ -11,12 +11,17 @@ public class Staff extends Person implements Serializable{
         super();
     };
 
-    public Staff( String name, String age, String sex, String email, String password, String role) {
+    public Staff( String name, String age, String sex, String email, String password) {
         super(name, age, sex, email, password);
-        this.role = role;
+        role = "STAFF";
     }
+
 
     public String getRole() {
         return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

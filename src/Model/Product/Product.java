@@ -2,8 +2,8 @@ package Model.Product;
 
 import java.io.Serializable;
 
-public abstract class Product implements Serializable {
-    protected int ID;
+public class Product implements Serializable {
+    protected int ID = 0;
 
     protected String name;
     protected double price;

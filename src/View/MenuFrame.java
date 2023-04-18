@@ -4,7 +4,11 @@
  */
 package View;
 
-import javax.swing.JPanel;
+import Controller.SettingController;
+import Model.Person.Staff;
+
+import javax.swing.*;
+import java.io.IOException;
 
 /**
  *
@@ -15,8 +19,10 @@ public class MenuFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
+    SettingController settingController;
     public MenuFrame() {
         initComponents();
+        settingController = new SettingController();
 
     }
 
@@ -459,26 +465,78 @@ public class MenuFrame extends javax.swing.JFrame {
 
     private void customerButtonMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
-        new MainFrame(1).setVisible(true);
-        this.dispose();
+        try {
+            if (settingController.checkVerifyProfile())
+            {
+                new MainFrame(1).setVisible(true);
+                this.dispose();
+            } else {
+                showMessage("You must setting your profile first!");
+
+            }
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
+
     }
 
     private void productButtonMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
-        new MainFrame(2).setVisible(true);
-        this.dispose();
+        try {
+            if (settingController.checkVerifyProfile())
+            {
+                new MainFrame(2).setVisible(true);
+                this.dispose();
+            } else {
+                showMessage("You must setting your profile first!");
+
+            }
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     private void orderButtonMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
-        new MainFrame(3).setVisible(true);
-        this.dispose();
+        try {
+            if (settingController.checkVerifyProfile())
+            {
+                new MainFrame(3).setVisible(true);
+                this.dispose();
+            } else {
+                showMessage("You must setting your profile first!");
+
+            }
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     private void staffButtonMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
-        new MainFrame(4).setVisible(true);
-        this.dispose();
+        try {
+            if (settingController.checkVerifyProfile())
+            {
+                Staff staff = (Staff) settingController.readProfile();
+                if (staff.getRole().equals("ADMIN")) {
+                    new MainFrame(4).setVisible(true);
+                    this.dispose();
+                } else showMessage("This Panel for Admin Only!");
+            } else {
+                showMessage("You must setting your profile first!");
+
+            }
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     private void settingButtonMouseClicked(java.awt.event.MouseEvent evt) {
@@ -493,6 +551,10 @@ public class MenuFrame extends javax.swing.JFrame {
 
     public void resetColor(JPanel panel){
         panel.setBackground(new java.awt.Color(240,240,240));
+    }
+
+    void showMessage(String msg){
+        JOptionPane.showMessageDialog(rootPane, msg);
     }
     /**
      * @param args the command line arguments

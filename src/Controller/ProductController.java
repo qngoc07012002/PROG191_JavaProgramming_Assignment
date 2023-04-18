@@ -63,7 +63,7 @@ public class ProductController {
         } else throw new InvalidPriceProductException("Invalid Price");
     }
 
-    public void removeCustomer(int indexID) throws IOException, ClassNotFoundException {
+    public void removeProduct(int indexID) throws IOException, ClassNotFoundException {
         ArrayList<Product> products = readProduct();
         for (int i=0; i< products.size();i++){
             Product prd = products.get(i);
@@ -73,6 +73,7 @@ public class ProductController {
             }
         }
     }
+
 
     public ArrayList<Product> findByName(String name) throws IOException, ClassNotFoundException {
         ArrayList<Product> products = readProduct();

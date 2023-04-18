@@ -4,10 +4,14 @@
  */
 package View;
 
-import Controller.CustomerController;
-import Controller.ProductController;
-import Controller.SettingController;
+import Controller.*;
+import Model.Order.Cart;
+import Model.Order.Order;
 import Model.Person.Customer;
+import Model.Person.Person;
+import Model.Product.Drink;
+import Model.Product.Food;
+import Model.Product.PersonalItem;
 import Model.Product.Product;
 
 import javax.swing.JOptionPane;
@@ -21,7 +25,8 @@ import Exception.InvalidPhoneNumberException;
 import Exception.PhoneNumberAlreadyUsedException;
 import Exception.EmailAlreadyUsedExeption;
 import Exception.InvalidEmailException;
-
+import Exception.OutofStockException;
+import Exception.InvalidPriceProductException;
 /**
  *
  * @author quang
@@ -34,7 +39,9 @@ public class CustomerFrame extends javax.swing.JFrame {
     CustomerController customerController;
     SettingController settingController;
     ProductController productController;
-    DefaultTableModel defaultProductTable;
+
+    OrderController orderController;
+    CartController cartController;
     public CustomerFrame() {
         initComponents();
         productPanel.setVisible(false);
@@ -44,8 +51,20 @@ public class CustomerFrame extends javax.swing.JFrame {
         customerController = new CustomerController();
         settingController = new SettingController();
         productController = new ProductController();
+        cartController = new CartController();
+        orderController = new OrderController();
+        try {
+            cartController.writeCart(new Cart());
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        }
+
         loadSettingProfile();
+
         loadProductTable();
+
+        loadCartTable();
+        loadOrderTable();
     }
 
     /**
@@ -932,6 +951,8 @@ public class CustomerFrame extends javax.swing.JFrame {
             {
                 unDisplayAll();
                 productPanel.setVisible(true);
+//                Person ctm = settingController.readProfile();
+//                showMessage(Integer.toString(ctm.getID()));
             } else {
                 showMessage("You must setting your profile first!");
                 unDisplayAll();
@@ -1015,23 +1036,143 @@ public class CustomerFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         int rowIndex = productTable.getSelectedRow();
         if (rowIndex>=0){
-            String input = JOptionPane.showInputDialog("Nhập số lượng:");
-            int value = (int) productTable.getValueAt(rowIndex,0);
-            int quantity = Integer.parseInt(input);
-            showMessage("Quantity:"+quantity+" ID"+Integer.toString(value));
+            String input = JOptionPane.showInputDialog("Enter Quantity:");
+
+            if (input != null) {
+                try {
+                int quantity = Integer.parseInt(input);
+                if (quantity <= 0) showMessage("Invalid Quantity");
+                else {
+                    int id = (int) productTable.getValueAt(rowIndex, 0);
+                    String name = (String) productTable.getValueAt(rowIndex, 1);
+                    double price = (double) productTable.getValueAt(rowIndex, 2);
+                    int quantityStock = (int) productTable.getValueAt(rowIndex, 3);
+                    String category = (String) productTable.getValueAt(rowIndex, 4);
+                    Product product;
+                    if (category.equals("Food")) {
+                        product = new Food(name, price, quantity, category);
+                        product.setID(id);
+                    } else if (category.equals("Drink")) {
+                        product = new Drink(name, price, quantity, category);
+                        product.setID(id);
+                    } else {
+                        product = new PersonalItem(name, price, quantity, category);
+                        product.setID(id);
+                    }
+                    try {
+                        if (cartController.checkStock(product)) {
+                            cartController.addProducttoCart(product);
+                            showMessage("Successfull");
+                            loadProductTable();
+                            loadCartTable();
+                        }
+                    } catch (IOException e) {
+                        showMessage(e.getMessage());
+                    } catch (ClassNotFoundException e) {
+                        showMessage(e.getMessage());
+                    } catch (OutofStockException e) {
+                        showMessage(e.getMessage());
+                    }
+
+                    //showMessage("Quantity Buy:" + quantity + " ID" + Integer.toString(id) + " " + name + " " + Double.toString(price) + " " + Integer.toString(quantityStock) + " " + category);
+                }
+                } catch (NumberFormatException e){
+                    showMessage("Wrong Format Number");
+                }
+            }
         } else showMessage("Please select row");
     }
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+
+        int rowIndex = shoppingCartTable.getSelectedRow();
+        if (rowIndex>=0) {
+            String input = JOptionPane.showInputDialog("Enter Quantity:");
+            if (input != null) {
+                try {
+                    int newQuantity = Integer.parseInt(input);
+                    if (newQuantity <= 0) showMessage("Invalid Quantity");
+                    else {
+                        int id = (int) shoppingCartTable.getValueAt(rowIndex, 0);
+                        String name = (String) shoppingCartTable.getValueAt(rowIndex, 1);
+                        double price = (double) shoppingCartTable.getValueAt(rowIndex, 2);
+                        int quantity = (int) shoppingCartTable.getValueAt(rowIndex, 3);
+                        String category = (String) shoppingCartTable.getValueAt(rowIndex, 4);
+                        Product product;
+                        if (category.equals("Food")) {
+                            product = new Food(name, price, newQuantity, category);
+                            product.setID(id);
+                        } else if (category.equals("Drink")) {
+                            product = new Drink(name, price, newQuantity, category);
+                            product.setID(id);
+                        } else {
+                            product = new PersonalItem(name, price, newQuantity, category);
+                            product.setID(id);
+                        }
+
+                        try {
+                            cartController.editCart(product);
+                            showMessage("Edit Successful");
+                            loadCartTable();
+                        } catch (IOException e) {
+                            showMessage(e.getMessage());
+                        } catch (ClassNotFoundException e) {
+                            showMessage(e.getMessage());
+                        } catch (OutofStockException e) {
+                            showMessage(e.getMessage());
+                        }
+                    }
+                } catch (NumberFormatException e){
+                    showMessage("Wrong Format Number");
+                }
+
+            }
+        } else showMessage("Please select row");
     }
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+
+        int rowIndex = shoppingCartTable.getSelectedRow();
+        if (rowIndex>=0) {
+            int result = JOptionPane.showConfirmDialog(rootPane,"Do you want to remove?","Remove Confirm",JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.OK_OPTION){
+                int id = (int) shoppingCartTable.getValueAt(rowIndex, 0);
+                try {
+                    cartController.removeProductInCart(id);
+                    showMessage("Remove Successful");
+                    loadCartTable();
+                } catch (IOException e) {
+                    showMessage(e.getMessage());
+                } catch (ClassNotFoundException e) {
+                    showMessage(e.getMessage());
+                }
+            }
+        } else showMessage("Please select row");
     }
 
     private void checkOutButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+
+        try {
+            Cart myCart = cartController.checkOut();
+            Order myOrder = new Order((Customer) settingController.readProfile(),myCart,myCart.getTotalPrice());
+            orderController.addOrder(myOrder);
+            loadOrderTable();
+            loadProductTable();
+            cartController.writeCart(new Cart());
+            loadCartTable();
+            showMessage("Checkout Successful");
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        } catch (InvalidPriceProductException e) {
+            showMessage(e.getMessage());
+        }
+
+
     }
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1063,7 +1204,10 @@ public class CustomerFrame extends javax.swing.JFrame {
                     if (settingController.saveProfile(customer)) {
                         customer = (Customer) settingController.readProfile();
                         if (settingController.checkVerifyProfile()) {
-                            if (customer.getID() == 0) customerController.addCustomer(customer);
+                            if (customer.getID() == 0) {
+                                customerController.addCustomer(customer);
+                                settingController.writeProfile(customer);
+                            }
                             else customerController.editCustomer(customer);
 
                         }
@@ -1110,7 +1254,8 @@ public class CustomerFrame extends javax.swing.JFrame {
             Customer customer = (Customer) settingController.readProfile();
             nameProfile.setText(customer.getName());
             ageProfile.setText(customer.getAge());
-            boxSex.setSelectedItem(customer.getSex());
+            if (customer.getSex().equals("Male")) boxSex.setSelectedIndex(0);
+                else boxSex.setSelectedIndex(1);
             emailProfile.setText(customer.getEmail());
             currentPasswordProfile.setText("");
             newPasswordProfile.setText("");
@@ -1125,7 +1270,12 @@ public class CustomerFrame extends javax.swing.JFrame {
     }
 
     public void loadProductTable(){
-        defaultProductTable = new DefaultTableModel();
+        DefaultTableModel defaultProductTable = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         productTable.setModel(defaultProductTable);
         defaultProductTable.addColumn("ID");
         defaultProductTable.addColumn("Name");
@@ -1145,15 +1295,69 @@ public class CustomerFrame extends javax.swing.JFrame {
         }
 
     }
+    public void loadCartTable(){
+        DefaultTableModel defaultCartTable = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        shoppingCartTable.setModel(defaultCartTable);
+        defaultCartTable.addColumn("ID");
+        defaultCartTable.addColumn("Name");
+        defaultCartTable.addColumn("Total Price");
+        defaultCartTable.addColumn("Quantity");
+        defaultCartTable.addColumn("Category");
 
+        try {
+            Cart cart = cartController.readCart();
+            ArrayList<Product> products = cart.getProductCart();
+            for (Product product : products){
+                defaultCartTable.addRow(new Object[]{product.getID(),product.getName(),product.getPrice(),product.getQuantity(),product.getCategory()});
+            }
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
+    }
+    public void loadOrderTable(){
+        DefaultTableModel defaultOrderTable = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        orderHistoryTable.setModel(defaultOrderTable);
+        defaultOrderTable.addColumn("Order ID");
+        defaultOrderTable.addColumn("Total Price");
+        defaultOrderTable.addColumn("Date");
+
+        try {
+            ArrayList<Order> orders = orderController.orderListCustomer((Customer) settingController.readProfile());
+            for (Order order : orders){
+                defaultOrderTable.addRow(new Object[]{order.getID(),order.getTotalPrice(),order.getDate()});
+            }
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
+    }
     public void findByNameProductTable(String name){
-        defaultProductTable = new DefaultTableModel();
+        DefaultTableModel defaultProductTable = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         productTable.setModel(defaultProductTable);
         defaultProductTable.addColumn("ID");
         defaultProductTable.addColumn("Name");
         defaultProductTable.addColumn("Price");
         defaultProductTable.addColumn("Quantity");
         defaultProductTable.addColumn("Category");
+
 
         try {
             ArrayList<Product> products = productController.findByName(name);
@@ -1169,6 +1373,10 @@ public class CustomerFrame extends javax.swing.JFrame {
 
     void showMessage(String msg){
         JOptionPane.showMessageDialog(rootPane, msg);
+    }
+
+    public boolean isCellEditable(int row, int column) {
+        return false; // Set all cells to be read-only
     }
     /**
      * @param args the command line arguments

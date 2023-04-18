@@ -105,7 +105,7 @@ public class StaffController {
             if (checkEmailAlreadyUsed(email))
             {
                 SettingController settingController = new SettingController();
-                settingController.writeProfile(new Staff("","","",email,password,""));
+                settingController.writeProfile(new Staff("","","",email,password));
                 check = true;
             } else throw new EmailAlreadyUsedExeption("Email Already Used");
         } else throw new InvalidEmailException("Invalid Email");
