@@ -1343,18 +1343,54 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void findCustomerActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+
+        try {
+            ArrayList<Customer> customers = customerController.findByName(findCustomer.getText());
+            loadCustomerTable(customers);
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     private void findProductActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        try {
+            ArrayList<Product> products = productController.findByName(findProduct.getText());
+            loadProductTable(products);
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
+
     }
 
     private void findOrderActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        try {
+            ArrayList<Order> orders = orderController.findByPhoneNumber(findOrder.getText());
+            loadOrderTable(orders);
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
+
     }
 
     private void findStaffActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+
+        try {
+            ArrayList<Staff> staffs = staffController.findByName(findStaff.getText());
+            loadStaffTable(staffs);
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     private void customerButtonMouseClicked(java.awt.event.MouseEvent evt) {
@@ -1499,14 +1535,38 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void removeCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        int rowIndex = customerTable.getSelectedRow();
+        if (rowIndex>=0){
+            int result = JOptionPane.showConfirmDialog(rootPane,"Do you want to remove?","Remove Confirm",JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.OK_OPTION) {
+                int id = (int) customerTable.getValueAt(rowIndex, 0);
+                try {
+                    customerController.removeCustomer(id);
+                    ArrayList<Customer> customers = customerController.readCustomer();
+                    loadCustomerTable(customers);
+                } catch (IOException e) {
+                    showMessage(e.getMessage());
+                } catch (ClassNotFoundException e) {
+                    showMessage(e.getMessage());
+                }
+            }
+        } else showMessage("Please select row");
     }
 
     private void editCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        int rowIndex = customerTable.getSelectedRow();
+        if (rowIndex>=0){
+            int id = (int) customerTable.getValueAt(rowIndex,0);
+            new View.Action.ActionCustomerFrame(id).setVisible(true);
+            this.dispose();
+        } else showMessage("Please select row");
     }
 
     private void addCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        new View.Action.ActionCustomerFrame(0).setVisible(true);
+        this.dispose();
     }
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1637,10 +1697,11 @@ public class MainFrame extends javax.swing.JFrame {
         defaultProductTable.addColumn("Name");
         defaultProductTable.addColumn("Price");
         defaultProductTable.addColumn("Quantity");
+        defaultProductTable.addColumn("Category");
         defaultProductTable.addColumn("Expiration Date");
 
         for (Product product : products){
-            defaultProductTable.addRow(new Object[]{product.getID(),product.getName(),product.getPrice(),product.getQuantity(),product.getExp()});
+            defaultProductTable.addRow(new Object[]{product.getID(),product.getName(),product.getPrice(),product.getQuantity(),product.getCategory(),product.getExp()});
         }
     }
     public void loadOrderTable(ArrayList<Order> orders){
@@ -1652,15 +1713,15 @@ public class MainFrame extends javax.swing.JFrame {
         };
         orderTable.setModel(defaultOrderTable);
         defaultOrderTable.addColumn("Order ID");
-        defaultOrderTable.addColumn("Customer ID");
         defaultOrderTable.addColumn("Customer Name");
+        defaultOrderTable.addColumn("Phone Number");
         defaultOrderTable.addColumn("Total Price");
         defaultOrderTable.addColumn("Date");
 
         for (Order order : orders){
             Customer ctm = order.getCustomer();
             defaultOrderTable.addRow(new Object[]{
-                    order.getID(),ctm.getID(),ctm.getName(),order.getTotalPrice(),order.getDate()});
+                    order.getID(),ctm.getName(),ctm.getPhoneNumber(),order.getTotalPrice(),order.getDate()});
         }
     }
     public void loadStaffTable(ArrayList<Staff> staffs){

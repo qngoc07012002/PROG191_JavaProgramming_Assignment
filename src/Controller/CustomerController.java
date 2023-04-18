@@ -102,11 +102,10 @@ public class CustomerController {
         ArrayList<Customer> customers = readCustomer();
         ArrayList<Customer> resultList = new ArrayList<>();
 
-        for (int i=0; i< customers.size();i++){
-          Customer ctm = customers.get(i);
-          if (ctm.getName().contains(name)){
-              resultList.add(customers.get(i));
-          }
+        for (Customer ctm : customers) {
+            if (ctm.getName().contains(name)) {
+                resultList.add(ctm);
+            }
         }
         return resultList;
     }
@@ -189,7 +188,7 @@ public class CustomerController {
         boolean check = true;
         ArrayList<Customer> customers = readCustomer();
         for (Customer ctm : customers) {
-            if (ctm.getEmail().equals(phoneNumber)){
+            if (ctm.getPhoneNumber().equals(phoneNumber)){
                 check = false;
                 break;
             }

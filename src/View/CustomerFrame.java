@@ -1209,7 +1209,7 @@ public class CustomerFrame extends javax.swing.JFrame {
                                 settingController.writeProfile(customer);
                             }
                             else customerController.editCustomer(customer);
-
+                            loadSettingProfile();
                         }
                         showMessage("Save Successful");
                     }

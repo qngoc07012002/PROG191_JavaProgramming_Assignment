@@ -78,6 +78,17 @@ public class StaffController {
         writeStaff(staffs);
     }
 
+    public ArrayList<Staff> findByName(String name) throws IOException, ClassNotFoundException {
+        ArrayList<Staff> staffs = readStaff();
+        ArrayList<Staff> resultList = new ArrayList<>();
+        for (Staff staff : staffs){
+            if (staff.getName().contains(name)){
+                resultList.add(staff);
+            }
+        }
+        return resultList;
+    }
+
     public boolean login(String email, String password) throws IOException, ClassNotFoundException {
         boolean check = false;
         ArrayList<Staff> staffs = readStaff();

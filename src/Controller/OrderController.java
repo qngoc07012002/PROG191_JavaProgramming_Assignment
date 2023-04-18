@@ -10,6 +10,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import Exception.InvalidPriceProductException;
+import Model.Product.Product;
+
 public class OrderController {
     public void writeOrder(ArrayList<Order> orders) throws IOException {
         FileOutputStream fo = new FileOutputStream("src/Data/Order.DAT");
@@ -47,5 +49,16 @@ public class OrderController {
         return resultList;
     }
 
+    public ArrayList<Order> findByPhoneNumber(String phoneNumber) throws IOException, ClassNotFoundException {
+        ArrayList<Order> orders = readOrder();
+        ArrayList<Order> resultList = new ArrayList<>();
+        for (Order order : orders){
+            Customer ctm = order.getCustomer();
+            if (ctm.getPhoneNumber().contains(phoneNumber)){
+                resultList.add(order);
+            }
+        }
+        return resultList;
+    }
 
 }
