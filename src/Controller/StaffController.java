@@ -78,6 +78,18 @@ public class StaffController {
         writeStaff(staffs);
     }
 
+    public Staff returnStaffbyID(int ID) throws IOException, ClassNotFoundException {
+        ArrayList<Staff> staffs = readStaff();
+        Staff staff = new Staff();
+        for (Staff stf : staffs){
+            if (stf.getID()==ID){
+                staff = stf;
+                break;
+            }
+        }
+        return staff;
+    }
+
     public ArrayList<Staff> findByName(String name) throws IOException, ClassNotFoundException {
         ArrayList<Staff> staffs = readStaff();
         ArrayList<Staff> resultList = new ArrayList<>();
@@ -140,8 +152,8 @@ public class StaffController {
         boolean check = true;
         ArrayList<Staff> staffs = readStaff();
         for (Staff stf : staffs) {
-            if (stf.getID() != stf.getID()) {
-                if (staff.getEmail().equals(staff.getEmail())) {
+            if (stf.getID() != staff.getID()) {
+                if (stf.getEmail().equals(staff.getEmail())) {
                     check = false;
                     break;
                 }

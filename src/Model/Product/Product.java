@@ -19,6 +19,10 @@ public class Product implements Serializable {
         this.category = getClass().getSimpleName();
     }
 
+    public Product() {
+
+    }
+
     public void setID(int ID) {
         this.ID = ID;
     }
@@ -61,5 +65,9 @@ public class Product implements Serializable {
 
     public String getCategory() {
         return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

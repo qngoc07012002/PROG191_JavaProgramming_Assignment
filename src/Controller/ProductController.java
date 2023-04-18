@@ -72,8 +72,19 @@ public class ProductController {
                 break;
             }
         }
+        writeProduct(products);
     }
 
+    public Product returnProductbyID(int ID) throws IOException, ClassNotFoundException {
+        Product product = new Product();
+        ArrayList<Product> products = readProduct();
+        for(Product prd : products){
+            if (prd.getID() == ID){
+                product = prd;
+            }
+        }
+        return product;
+    }
 
     public ArrayList<Product> findByName(String name) throws IOException, ClassNotFoundException {
         ArrayList<Product> products = readProduct();
@@ -88,13 +99,16 @@ public class ProductController {
 
     public ArrayList<Product> findByCategory(String name) throws IOException, ClassNotFoundException {
         ArrayList<Product> products = readProduct();
-        ArrayList<Product> resultList = new ArrayList<>();
-        for (Product prd : products){
-            if (prd.getCategory().equals(name)){
-                resultList.add(prd);
+        if (name.equals("All")) return products;
+        else {
+            ArrayList<Product> resultList = new ArrayList<>();
+            for (Product prd : products) {
+                if (prd.getCategory().equals(name)) {
+                    resultList.add(prd);
+                }
             }
+            return resultList;
         }
-        return resultList;
     }
 
     public ArrayList<Product> findByExpProduct() throws IOException, ClassNotFoundException {

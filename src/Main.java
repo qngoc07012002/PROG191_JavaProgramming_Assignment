@@ -94,25 +94,25 @@ public class Main {
 //            System.out.println(e.getMessage());
 //        }
 
-        try {
-           ArrayList<Customer> customers = customerController.readCustomer();
-//           for (Customer customer : customers){
-//               System.out.println(customer.getID()+" "+customer.getPhoneNumber());
+//        try {
+//           ArrayList<Customer> customers = customerController.readCustomer();
+////           for (Customer customer : customers){
+////               System.out.println(customer.getID()+" "+customer.getPhoneNumber());
+////           }
+//           ArrayList<Staff> staffs = staffController.readStaff();
+//           for (Staff staff : staffs){
+//               System.out.println(staff.getID()+" "+staff.getEmail());
 //           }
-           ArrayList<Staff> staffs = staffController.readStaff();
-           for (Staff staff : staffs){
-               System.out.println(staff.getID()+" "+staff.getEmail());
-           }
 
 
 
 
-
-        } catch (ClassNotFoundException e){
-            e.printStackTrace();
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+//
+//        } catch (ClassNotFoundException e){
+//            e.printStackTrace();
+//        } catch (IOException e){
+//            e.printStackTrace();
+//        }
 
 //        if (!checkAdmin.isSelected()){ //Customer Login
 //            String email = username.getText();

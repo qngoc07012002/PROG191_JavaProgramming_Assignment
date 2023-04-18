@@ -37,6 +37,30 @@ public class OrderController {
         } else throw new InvalidPriceProductException("Invalid Price");
     }
 
+    public void editOrder(Order order) throws IOException, ClassNotFoundException {
+        ArrayList<Order> orders = readOrder();
+        for (int i=0; i< orders.size();i++){
+            Order ord = orders.get(i);
+            if (order.getID() == ord.getID()){
+                orders.set(i,order);
+                break;
+            }
+        }
+        writeOrder(orders);
+    }
+
+    public void removeOrder(int ID) throws IOException, ClassNotFoundException {
+        ArrayList<Order> orders = readOrder();
+        for (int i = 0; i < orders.size(); i++) {
+            Order ord = orders.get(i);
+            if (ord.getID() == ID) {
+                orders.remove(i);
+                break;
+            }
+        }
+        writeOrder(orders);
+    }
+
     public ArrayList<Order> orderListCustomer(Customer customer) throws IOException, ClassNotFoundException {
         ArrayList<Order> orders = readOrder();
         ArrayList<Order> resultList = new ArrayList<>();
@@ -61,4 +85,15 @@ public class OrderController {
         return resultList;
     }
 
+    public Order returnOrderbyID(int ID) throws IOException, ClassNotFoundException {
+        Order order = new Order();
+        ArrayList<Order> orders = readOrder();
+        for(Order ord : orders){
+            if (ord.getID() == ID){
+                order = ord;
+                break;
+            }
+        }
+        return order;
+    }
 }

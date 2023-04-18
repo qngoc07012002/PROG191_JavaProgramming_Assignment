@@ -6,6 +6,7 @@ import Exception.InvalidEmailException;
 import Exception.InvalidAgeException;
 import Exception.InvalidPhoneNumberException;
 import Exception.PhoneNumberAlreadyUsedException;
+import Exception.CustomerNotAvailableException;
 
 
 import javax.swing.*;
@@ -144,6 +145,18 @@ public class CustomerController {
         return check;
     }
 
+    public void checkCustomerAvailable(int ID) throws IOException, ClassNotFoundException, CustomerNotAvailableException {
+        ArrayList<Customer> customers = readCustomer();
+        boolean check = false;
+        for (Customer customer : customers){
+            if (customer.getID() == ID){
+                check = true;
+                break;
+            }
+        }
+        if (!check) throw new CustomerNotAvailableException("Customer Not Available");
+    }
+
     public boolean checkEmailAlreadyUsed(String email) throws IOException, ClassNotFoundException {
         boolean check = true;
         ArrayList<Customer> customers = readCustomer();
@@ -155,6 +168,7 @@ public class CustomerController {
         }
         return check;
     }
+
 
     public boolean checkEmailAlreadyUsedEdit(Customer customer) throws IOException, ClassNotFoundException {
         boolean check = true;

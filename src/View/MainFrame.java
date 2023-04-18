@@ -1357,6 +1357,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void findProductActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         try {
+            boxCategory.setSelectedIndex(0);
             ArrayList<Product> products = productController.findByName(findProduct.getText());
             loadProductTable(products);
         } catch (IOException e) {
@@ -1487,14 +1488,38 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void removeStaffButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        int rowIndex = staffTable.getSelectedRow();
+        if (rowIndex>=0){
+            int result = JOptionPane.showConfirmDialog(rootPane,"Do you want to remove?","Remove Confirm",JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.OK_OPTION) {
+                int id = (int) staffTable.getValueAt(rowIndex, 0);
+                try {
+                    staffController.removeStaff(id);
+                    ArrayList<Staff> staffs = staffController.readStaff();
+                    loadStaffTable(staffs);
+                } catch (IOException e) {
+                    showMessage(e.getMessage());
+                } catch (ClassNotFoundException e) {
+                    showMessage(e.getMessage());
+                }
+            }
+        } else showMessage("Please select row");
     }
 
     private void editStaffButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        int rowIndex = staffTable.getSelectedRow();
+        if (rowIndex>=0){
+            int id = (int) staffTable.getValueAt(rowIndex,0);
+            new View.Action.ActionStaffFrame(id).setVisible(true);
+            this.dispose();
+        } else showMessage("Please select row");
     }
 
     private void addStaffButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        new View.Action.ActionStaffFrame(0).setVisible(true);
+        this.dispose();
     }
 
     private void reportOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1503,34 +1528,109 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void removeOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        int rowIndex = orderTable.getSelectedRow();
+        if (rowIndex>=0){
+            int result = JOptionPane.showConfirmDialog(rootPane,"Do you want to remove?","Remove Confirm",JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.OK_OPTION) {
+                int id = (int) orderTable.getValueAt(rowIndex, 0);
+                try {
+                    orderController.removeOrder(id);
+                    ArrayList<Order> orders = orderController.readOrder();
+                    loadOrderTable(orders);
+                } catch (IOException e) {
+                    showMessage(e.getMessage());
+                } catch (ClassNotFoundException e) {
+                    showMessage(e.getMessage());
+                }
+            }
+        } else showMessage("Please select row");
     }
 
     private void editOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        int rowIndex = orderTable.getSelectedRow();
+        if (rowIndex>=0){
+            int id = (int) orderTable.getValueAt(rowIndex,0);
+            new View.Action.ActionOrderFrame(id).setVisible(true);
+            this.dispose();
+        } else showMessage("Please select row");
     }
 
     private void addOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        new View.Action.ActionOrderFrame(0).setVisible(true);
+        this.dispose();
     }
 
     private void checkExpiredProductButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+
+        try {
+            ArrayList<Product> products = productController.findByExpProduct();
+            loadProductTable(products);
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
+
     }
 
     private void boxCategoryActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        int find = boxCategory.getSelectedIndex();
+
+            try {
+                ArrayList<Product> products = new ArrayList<>();
+                if (find==0) products = productController.findByCategory("All");
+                else if (find == 1) products = productController.findByCategory("Food");
+                else if (find == 2) products = productController.findByCategory("Drink");
+                else products = productController.findByCategory("PersonalItem");
+                loadProductTable(products);
+            } catch (IOException e) {
+                showMessage(e.getMessage());
+            } catch (ClassNotFoundException e) {
+                showMessage(e.getMessage());
+            }
+
+
     }
 
     private void removeProductButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        int rowIndex = productTable.getSelectedRow();
+        if (rowIndex>=0){
+            int result = JOptionPane.showConfirmDialog(rootPane,"Do you want to remove?","Remove Confirm",JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.OK_OPTION) {
+                int id = (int) productTable.getValueAt(rowIndex, 0);
+                try {
+                    productController.removeProduct(id);
+                    ArrayList<Product> products = productController.readProduct();
+                    loadProductTable(products);
+                } catch (IOException e) {
+                    showMessage(e.getMessage());
+                } catch (ClassNotFoundException e) {
+                    showMessage(e.getMessage());
+                }
+            }
+        } else showMessage("Please select row");
     }
 
     private void editProductButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        int rowIndex = productTable.getSelectedRow();
+        if (rowIndex>=0){
+            int id = (int) productTable.getValueAt(rowIndex,0);
+            new View.Action.ActionProductFrame(id).setVisible(true);
+            this.dispose();
+        } else showMessage("Please select row");
     }
 
     private void addProductButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+
+        new View.Action.ActionProductFrame(0).setVisible(true);
+        this.dispose();
     }
 
     private void removeCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {
