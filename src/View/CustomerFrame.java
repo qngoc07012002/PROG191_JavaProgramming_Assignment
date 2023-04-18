@@ -5,18 +5,23 @@
 package View;
 
 import Controller.CustomerController;
+import Controller.ProductController;
 import Controller.SettingController;
 import Model.Person.Customer;
+import Model.Product.Product;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import Exception.InvalidAgeException;
 import Exception.InvalidPhoneNumberException;
 import Exception.PhoneNumberAlreadyUsedException;
 import Exception.EmailAlreadyUsedExeption;
 import Exception.InvalidEmailException;
+
 /**
  *
  * @author quang
@@ -26,10 +31,10 @@ public class CustomerFrame extends javax.swing.JFrame {
     /**
      * Creates new form CustomerFrame
      */
-
     CustomerController customerController;
     SettingController settingController;
-
+    ProductController productController;
+    DefaultTableModel defaultProductTable;
     public CustomerFrame() {
         initComponents();
         productPanel.setVisible(false);
@@ -38,7 +43,9 @@ public class CustomerFrame extends javax.swing.JFrame {
         settingPanel.setVisible(true);
         customerController = new CustomerController();
         settingController = new SettingController();
+        productController = new ProductController();
         loadSettingProfile();
+        loadProductTable();
     }
 
     /**
@@ -59,9 +66,8 @@ public class CustomerFrame extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         productTable = new javax.swing.JTable();
         jLabel16 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        findByName = new javax.swing.JTextField();
         addToCart = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         shoppingCartPanel = new javax.swing.JPanel();
         kGradientPanel2 = new com.k33ptoo.components.KGradientPanel();
         jLabel8 = new javax.swing.JLabel();
@@ -69,9 +75,9 @@ public class CustomerFrame extends javax.swing.JFrame {
         jLabel33 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         shoppingCartTable = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        editButton = new javax.swing.JButton();
+        removeButton = new javax.swing.JButton();
+        checkOutButton = new javax.swing.JButton();
         orderHistoryPanel = new javax.swing.JPanel();
         kGradientPanel4 = new com.k33ptoo.components.KGradientPanel();
         jLabel10 = new javax.swing.JLabel();
@@ -79,7 +85,6 @@ public class CustomerFrame extends javax.swing.JFrame {
         jLabel37 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
         orderHistoryTable = new javax.swing.JTable();
-        jButton11 = new javax.swing.JButton();
         settingPanel = new javax.swing.JPanel();
         kGradientPanel5 = new com.k33ptoo.components.KGradientPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -192,16 +197,19 @@ public class CustomerFrame extends javax.swing.JFrame {
 
         jLabel16.setIcon(new javax.swing.ImageIcon("C:\\Users\\quang\\OneDrive\\Documents\\NetBeansProjects\\test\\src\\main\\java\\images\\icons8_search_24px_1.png")); // NOI18N
 
-        jTextField1.setText("Find by Name");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        findByName.setText("Find by Name");
+        findByName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                findByNameActionPerformed(evt);
             }
         });
 
         addToCart.setText("Add To Cart");
-
-        jButton1.setText("View");
+        addToCart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addToCartActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout productPanelLayout = new javax.swing.GroupLayout(productPanel);
         productPanel.setLayout(productPanelLayout);
@@ -215,9 +223,7 @@ public class CustomerFrame extends javax.swing.JFrame {
                                 .addContainerGap()
                                 .addComponent(jLabel16)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1)
+                                .addComponent(findByName, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(addToCart)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -231,9 +237,8 @@ public class CustomerFrame extends javax.swing.JFrame {
                                 .addGroup(productPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, productPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(addToCart)
-                                                .addComponent(jButton1)))
+                                                .addComponent(findByName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(addToCart)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -304,11 +309,26 @@ public class CustomerFrame extends javax.swing.JFrame {
         shoppingCartTable.setShowGrid(true);
         jScrollPane4.setViewportView(shoppingCartTable);
 
-        jButton3.setText("Edit");
+        editButton.setText("Edit");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButtonActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Remove");
+        removeButton.setText("Remove");
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeButtonActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("Check Out");
+        checkOutButton.setText("Check Out");
+        checkOutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkOutButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout shoppingCartPanelLayout = new javax.swing.GroupLayout(shoppingCartPanel);
         shoppingCartPanel.setLayout(shoppingCartPanelLayout);
@@ -320,11 +340,11 @@ public class CustomerFrame extends javax.swing.JFrame {
                         .addComponent(jScrollPane4)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, shoppingCartPanelLayout.createSequentialGroup()
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton3)
+                                .addComponent(editButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton4)
+                                .addComponent(removeButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton5)
+                                .addComponent(checkOutButton)
                                 .addContainerGap())
         );
         shoppingCartPanelLayout.setVerticalGroup(
@@ -336,9 +356,9 @@ public class CustomerFrame extends javax.swing.JFrame {
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(shoppingCartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jButton3)
-                                        .addComponent(jButton4)
-                                        .addComponent(jButton5))
+                                        .addComponent(editButton)
+                                        .addComponent(removeButton)
+                                        .addComponent(checkOutButton))
                                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -408,8 +428,6 @@ public class CustomerFrame extends javax.swing.JFrame {
         orderHistoryTable.setShowGrid(true);
         jScrollPane6.setViewportView(orderHistoryTable);
 
-        jButton11.setText("Report");
-
         javax.swing.GroupLayout orderHistoryPanelLayout = new javax.swing.GroupLayout(orderHistoryPanel);
         orderHistoryPanel.setLayout(orderHistoryPanelLayout);
         orderHistoryPanelLayout.setHorizontalGroup(
@@ -418,10 +436,6 @@ public class CustomerFrame extends javax.swing.JFrame {
                                 .addComponent(kGradientPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                         .addComponent(jScrollPane6)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderHistoryPanelLayout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton11)
-                                .addContainerGap())
         );
         orderHistoryPanelLayout.setVerticalGroup(
                 orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -429,10 +443,7 @@ public class CustomerFrame extends javax.swing.JFrame {
                                 .addGap(30, 30, 30)
                                 .addComponent(kGradientPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton11)
-                                .addContainerGap(25, Short.MAX_VALUE))
+                                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE))
         );
 
         settingPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -508,6 +519,10 @@ public class CustomerFrame extends javax.swing.JFrame {
             }
         });
 
+        currentPasswordProfile.setText("jPasswordField1");
+
+        newPasswordProfile.setText("jPasswordField2");
+
         javax.swing.GroupLayout settingPanelLayout = new javax.swing.GroupLayout(settingPanel);
         settingPanel.setLayout(settingPanelLayout);
         settingPanelLayout.setHorizontalGroup(
@@ -532,10 +547,10 @@ public class CustomerFrame extends javax.swing.JFrame {
                                                         .addComponent(nameProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(ageProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(boxSex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(emailProfile)
+                                                        .addComponent(emailProfile, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
                                                         .addComponent(addressProfile)
                                                         .addComponent(currentPasswordProfile)
-                                                        .addComponent(newPasswordProfile, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)))
+                                                        .addComponent(newPasswordProfile)))
                                         .addGroup(settingPanelLayout.createSequentialGroup()
                                                 .addGap(17, 17, 17)
                                                 .addComponent(jLabel19)
@@ -874,8 +889,9 @@ public class CustomerFrame extends javax.swing.JFrame {
         System.exit(0);
     }
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void findByNameActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        findByNameProductTable(findByName.getText());
     }
 
     private void productButtonMouseEntered(java.awt.event.MouseEvent evt) {
@@ -995,8 +1011,32 @@ public class CustomerFrame extends javax.swing.JFrame {
         settingPanel.setVisible(true);
     }
 
+    private void addToCartActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        int rowIndex = productTable.getSelectedRow();
+        if (rowIndex>=0){
+            String input = JOptionPane.showInputDialog("Nhập số lượng:");
+            int value = (int) productTable.getValueAt(rowIndex,0);
+            int quantity = Integer.parseInt(input);
+            showMessage("Quantity:"+quantity+" ID"+Integer.toString(value));
+        } else showMessage("Please select row");
+    }
+
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void checkOutButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+
         String name = nameProfile.getText();
         String age = ageProfile.getText();
         String sex = (String) boxSex.getSelectedItem();
@@ -1029,7 +1069,7 @@ public class CustomerFrame extends javax.swing.JFrame {
                         }
                         showMessage("Save Successful");
                     }
-                     else showMessage("UnSuccessful");
+                    else showMessage("UnSuccessful");
 
                 } else showMessage("Wrong Current Password");
 
@@ -1049,9 +1089,7 @@ public class CustomerFrame extends javax.swing.JFrame {
                 showMessage(e.getMessage());
             }
 
-
     }
-
     public void setColor(JPanel panel){
         panel.setOpaque(true);
         panel.setBackground(new java.awt.Color(47, 47, 47));
@@ -1067,7 +1105,6 @@ public class CustomerFrame extends javax.swing.JFrame {
         orderHistoryPanel.setVisible(false);
         settingPanel.setVisible(false);
     }
-
     public void loadSettingProfile(){
         try {
             Customer customer = (Customer) settingController.readProfile();
@@ -1085,8 +1122,51 @@ public class CustomerFrame extends javax.swing.JFrame {
         } catch (ClassNotFoundException e) {
             showMessage(e.getMessage());
         }
+    }
+
+    public void loadProductTable(){
+        defaultProductTable = new DefaultTableModel();
+        productTable.setModel(defaultProductTable);
+        defaultProductTable.addColumn("ID");
+        defaultProductTable.addColumn("Name");
+        defaultProductTable.addColumn("Price");
+        defaultProductTable.addColumn("Quantity");
+        defaultProductTable.addColumn("Category");
+
+        try {
+            ArrayList<Product> products = productController.readProduct();
+            for (Product product : products){
+                defaultProductTable.addRow(new Object[]{product.getID(),product.getName(),product.getPrice(),product.getQuantity(),product.getCategory()});
+            }
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
 
     }
+
+    public void findByNameProductTable(String name){
+        defaultProductTable = new DefaultTableModel();
+        productTable.setModel(defaultProductTable);
+        defaultProductTable.addColumn("ID");
+        defaultProductTable.addColumn("Name");
+        defaultProductTable.addColumn("Price");
+        defaultProductTable.addColumn("Quantity");
+        defaultProductTable.addColumn("Category");
+
+        try {
+            ArrayList<Product> products = productController.findByName(name);
+            for (Product product : products){
+                defaultProductTable.addRow(new Object[]{product.getID(),product.getName(),product.getPrice(),product.getQuantity(),product.getCategory()});
+            }
+        } catch (IOException e) {
+            showMessage(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            showMessage(e.getMessage());
+        }
+    }
+
     void showMessage(String msg){
         JOptionPane.showMessageDialog(rootPane, msg);
     }
@@ -1131,14 +1211,12 @@ public class CustomerFrame extends javax.swing.JFrame {
     private javax.swing.JTextField addressProfile;
     private javax.swing.JTextField ageProfile;
     private javax.swing.JComboBox<String> boxSex;
+    private javax.swing.JButton checkOutButton;
     private javax.swing.JPasswordField currentPasswordProfile;
+    private javax.swing.JButton editButton;
     private javax.swing.JTextField emailProfile;
     private javax.swing.JLabel exit;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JTextField findByName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1171,7 +1249,6 @@ public class CustomerFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTextField jTextField1;
     private com.k33ptoo.components.KButton kButton1;
     private com.k33ptoo.components.KGradientPanel kGradientPanel1;
     private com.k33ptoo.components.KGradientPanel kGradientPanel2;
@@ -1188,6 +1265,7 @@ public class CustomerFrame extends javax.swing.JFrame {
     private javax.swing.JPanel productButton;
     private javax.swing.JPanel productPanel;
     private javax.swing.JTable productTable;
+    private javax.swing.JButton removeButton;
     private javax.swing.JButton saveButton;
     private javax.swing.JPanel settingButton;
     private javax.swing.JPanel settingPanel;
