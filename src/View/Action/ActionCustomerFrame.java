@@ -6,7 +6,7 @@ package View.Action;
 
 import Controller.CustomerController;
 import Model.Person.Customer;
-import View.MainFrame;
+import View.StaffFrame;
 
 import Exception.InvalidAgeException;
 import Exception.InvalidEmailException;
@@ -216,7 +216,7 @@ public class ActionCustomerFrame extends javax.swing.JFrame {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         this.dispose();
-        new MainFrame(1).setVisible(true);
+        new StaffFrame(1).setVisible(true);
     }
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -237,7 +237,7 @@ public class ActionCustomerFrame extends javax.swing.JFrame {
                 customerController.editCustomer(customer);
                 showMessage("Edit Successful");
                 this.dispose();
-                new MainFrame(1).setVisible(true);
+                new StaffFrame(1).setVisible(true);
             } catch (IOException e) {
                 showMessage(e.getMessage());
             } catch (ClassNotFoundException e) {
@@ -260,7 +260,7 @@ public class ActionCustomerFrame extends javax.swing.JFrame {
                     customerController.addCustomer(customer);
                     showMessage("Add Successful");
                     this.dispose();
-                    new MainFrame(1).setVisible(true);
+                    new StaffFrame(1).setVisible(true);
                 } catch (IOException e) {
                     showMessage(e.getMessage());
                 } catch (ClassNotFoundException e) {

@@ -468,7 +468,7 @@ public class MenuFrame extends javax.swing.JFrame {
         try {
             if (settingController.checkVerifyProfile())
             {
-                new MainFrame(1).setVisible(true);
+                new StaffFrame(1).setVisible(true);
                 this.dispose();
             } else {
                 showMessage("You must setting your profile first!");
@@ -487,7 +487,7 @@ public class MenuFrame extends javax.swing.JFrame {
         try {
             if (settingController.checkVerifyProfile())
             {
-                new MainFrame(2).setVisible(true);
+                new StaffFrame(2).setVisible(true);
                 this.dispose();
             } else {
                 showMessage("You must setting your profile first!");
@@ -505,7 +505,7 @@ public class MenuFrame extends javax.swing.JFrame {
         try {
             if (settingController.checkVerifyProfile())
             {
-                new MainFrame(3).setVisible(true);
+                new StaffFrame(3).setVisible(true);
                 this.dispose();
             } else {
                 showMessage("You must setting your profile first!");
@@ -525,7 +525,7 @@ public class MenuFrame extends javax.swing.JFrame {
             {
                 Staff staff = (Staff) settingController.readProfile();
                 if (staff.getRole().equals("ADMIN")) {
-                    new MainFrame(4).setVisible(true);
+                    new StaffFrame(4).setVisible(true);
                     this.dispose();
                 } else showMessage("This Panel for Admin Only!");
             } else {
@@ -541,7 +541,7 @@ public class MenuFrame extends javax.swing.JFrame {
 
     private void settingButtonMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
-        new MainFrame(5).setVisible(true);
+        new StaffFrame(5).setVisible(true);
         this.dispose();
     }
 

@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Order.Order;
 import Model.Person.Customer;
 import Model.Product.Product;
 
@@ -35,7 +36,20 @@ public class ProductController {
 
     public void addProduct(Product product) throws IOException, ClassNotFoundException, InvalidPriceProductException, InvalidQuantityProductException, InvalidExpProductException {
         ArrayList<Product> products = readProduct();
-        product.setID(products.size()+1);
+        boolean kt = false; int i = 1;
+        while (!kt){
+            kt = true;
+            for (Product prd : products){
+                if (prd.getID() == i){
+                    kt = false;
+                    break;
+                }
+            }
+            if (kt) {
+                product.setID(i);
+            } else i++;
+        }
+        //product.setID(products.size()+1);
         if (checkValidPrice(product.getPrice())){
             if (checkValidQuantity(product.getQuantity())){
                 if (checkValidExp(product.getExp())){

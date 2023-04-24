@@ -2,6 +2,7 @@ package Controller;
 
 
 
+import Model.Order.Order;
 import Model.Person.Customer;
 import Model.Person.Staff;
 
@@ -34,7 +35,20 @@ public class StaffController {
 
     public void addStaff(Staff staff) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException, InvalidAgeException {
         ArrayList<Staff> staffs = readStaff();
-        staff.setID(staffs.size()+1);
+        boolean kt = false; int i = 1;
+        while (!kt){
+            kt = true;
+            for (Staff stf : staffs){
+                if (stf.getID() == i){
+                    kt = false;
+                    break;
+                }
+            }
+            if (kt) {
+                staff.setID(i);
+            } else i++;
+        }
+        //staff.setID(staffs.size()+1);
         if (checkValidEmail(staff.getEmail())) {
            if (checkValidAge(staff.getAge())) {
                if (checkEmailAlreadyUsed(staff.getEmail())) {

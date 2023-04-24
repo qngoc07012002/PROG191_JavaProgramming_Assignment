@@ -34,7 +34,20 @@ public class CustomerController {
 
     public void addCustomer(Customer customer) throws IOException, ClassNotFoundException, EmailAlreadyUsedExeption, InvalidEmailException, InvalidPhoneNumberException, InvalidAgeException, PhoneNumberAlreadyUsedException {
         ArrayList<Customer> customers = readCustomer();
-        customer.setID(customers.size()+1);
+        boolean kt = false; int i = 1;
+        while (!kt){
+            kt = true;
+            for (Customer ctm : customers){
+                if (ctm.getID() == i){
+                    kt = false;
+                    break;
+                }
+            }
+            if (kt) {
+                customer.setID(i);
+            } else i++;
+        }
+        // customer.setID(customers.size()+1);
         if (checkValidEmail(customer.getEmail())) {
             if (checkValidAge(customer.getAge())) {
                 if (checkValidPhoneNumber(customer.getPhoneNumber())) {
@@ -42,7 +55,6 @@ public class CustomerController {
                         if (checkPhoneAlreadyUsed(customer.getPhoneNumber())) {
                             customers.add(customer);
                             writeCustomer(customers);
-
                         } else throw new PhoneNumberAlreadyUsedException("Phone Already Used");
                     } else throw new EmailAlreadyUsedExeption("Email Already Used");
                 } else throw new InvalidPhoneNumberException("Invalid Phone Number");
@@ -61,9 +73,7 @@ public class CustomerController {
                             for (int i = 0; i < customers.size(); i++) {
                                 Customer ctm = customers.get(i);
                                 if (ctm.getID() == customer.getID()) {
-
                                     customers.set(i, customer);
-
                                     break;
                                 }
                             }

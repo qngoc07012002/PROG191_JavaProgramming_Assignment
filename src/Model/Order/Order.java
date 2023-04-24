@@ -9,9 +9,7 @@ import java.util.List;
 
 public class Order implements Serializable {
     protected int ID = 0;
-
     protected Customer customer;
-
     protected Cart cart;
 
     protected double totalPrice;

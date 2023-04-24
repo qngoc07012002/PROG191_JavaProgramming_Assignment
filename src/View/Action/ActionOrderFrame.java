@@ -6,11 +6,10 @@ package View.Action;
 
 import Controller.CustomerController;
 import Controller.OrderController;
-import Controller.ProductController;
 import Model.Order.Cart;
 import Model.Order.Order;
 import Model.Person.Customer;
-import View.MainFrame;
+import View.StaffFrame;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -162,7 +161,7 @@ public class ActionOrderFrame extends javax.swing.JFrame {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         this.dispose();
-        new MainFrame(3).setVisible(true);
+        new StaffFrame(3).setVisible(true);
 
     }
 
@@ -177,13 +176,13 @@ public class ActionOrderFrame extends javax.swing.JFrame {
                 orderController.editOrder(order);
                 showMessage("Edit Successful");
                 this.dispose();
-                new MainFrame(3).setVisible(true);
+                new StaffFrame(3).setVisible(true);
             } else {
                 customerController.checkCustomerAvailable(customerID);
                 orderController.addOrder(order);
                 showMessage("Add Successful");
                 this.dispose();
-                new MainFrame(3).setVisible(true);
+                new StaffFrame(3).setVisible(true);
             }
         }catch (NumberFormatException e){
             showMessage("Wrong Format Value");

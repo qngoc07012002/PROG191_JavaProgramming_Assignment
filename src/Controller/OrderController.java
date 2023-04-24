@@ -5,6 +5,7 @@ import Model.Order.Order;
 import Model.Person.Customer;
 
 import java.io.*;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -30,7 +31,20 @@ public class OrderController {
 
     public void addOrder(Order order) throws IOException, ClassNotFoundException, InvalidPriceProductException {
         ArrayList<Order> orders = readOrder();
-        order.setID(orders.size()+1);
+        boolean kt = false; int i = 1;
+        while (!kt){
+            kt = true;
+            for (Order ord : orders){
+                if (ord.getID() == i){
+                    kt = false;
+                    break;
+                }
+            }
+            if (kt) {
+                order.setID(i);
+            } else i++;
+        }
+        //order.setID(orders.size()+1);
         if (order.getTotalPrice()>=0) {
             orders.add(order);
             writeOrder(orders);
@@ -95,5 +109,50 @@ public class OrderController {
             }
         }
         return order;
+    }
+
+    public ArrayList<Product> orderStatistics() throws IOException, ClassNotFoundException {
+        ArrayList<Product> products = new ArrayList<>();
+        ArrayList<Order> orders = readOrder();
+        for (Order order : orders){
+            Cart cart = order.getCart();
+            ArrayList<Product> productInCart = cart.getProductCart();
+            for (Product product : productInCart){
+                boolean kt = false;
+                for (int i=0; i< products.size();i++){
+                    Product prd = products.get(i);
+                    if (prd.getName().equals(product.getName())){
+                        prd.setQuantity(prd.getQuantity()+product.getQuantity());
+                        products.set(i,prd);
+                        kt = true;
+                        break;
+                    }
+                }
+                if (!kt) products.add(product);
+            }
+        }
+
+        for (int i=0; i< products.size() - 1;i++){
+            for (int j=0; j< products.size()-i-1; j++){
+                Product prdj = products.get(j);
+                Product prdj1 = products.get(j+1);
+                if (prdj.getQuantity() < prdj1.getQuantity() ){
+                    Product temp = prdj;
+                    products.set(j,prdj1);
+                    products.set(j+1,temp);
+                }
+            }
+        }
+
+        return products;
+    }
+
+    public double totalRevenue() throws IOException, ClassNotFoundException {
+        ArrayList<Order> orders = readOrder();
+        double total = 0;
+        for (Order order : orders){
+            total = total + order.getTotalPrice();
+        }
+        return total;
     }
 }

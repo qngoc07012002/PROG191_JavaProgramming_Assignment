@@ -5,7 +5,6 @@
 package View.Action;
 
 import Controller.ProductController;
-import Model.Person.Customer;
 import Model.Product.Product;
 
 import javax.swing.*;
@@ -14,7 +13,7 @@ import java.io.IOException;
 import Exception.InvalidExpProductException;
 import Exception.InvalidPriceProductException;
 import Exception.InvalidQuantityProductException;
-import View.MainFrame;
+import View.StaffFrame;
 
 /**
  *
@@ -202,7 +201,7 @@ public class ActionProductFrame extends javax.swing.JFrame {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         this.dispose();
-        new MainFrame(2).setVisible(true);
+        new StaffFrame(2).setVisible(true);
 
     }
 
@@ -227,14 +226,14 @@ public class ActionProductFrame extends javax.swing.JFrame {
                 productController.editProduct(product);
                 showMessage("Edit Successful");
                 this.dispose();
-                new MainFrame(2).setVisible(true);
+                new StaffFrame(2).setVisible(true);
             } else {
                 if (name.equals("")) showMessage("Please complete all information");
                 else {
                     productController.addProduct(product);
                     showMessage("Add Successful");
                     this.dispose();
-                    new MainFrame(2).setVisible(true);
+                    new StaffFrame(2).setVisible(true);
                 }
             }
 

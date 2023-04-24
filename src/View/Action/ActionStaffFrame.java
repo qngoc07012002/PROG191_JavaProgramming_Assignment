@@ -4,11 +4,9 @@
  */
 package View.Action;
 
-import Controller.CustomerController;
 import Controller.StaffController;
-import Model.Person.Customer;
 import Model.Person.Staff;
-import View.MainFrame;
+import View.StaffFrame;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -205,7 +203,7 @@ public class ActionStaffFrame extends javax.swing.JFrame {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         this.dispose();
-        new MainFrame(4).setVisible(true);
+        new StaffFrame(4).setVisible(true);
     }
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -228,14 +226,14 @@ public class ActionStaffFrame extends javax.swing.JFrame {
                 staffController.editStaff(staff);
                 showMessage("Edit Successful");
                 this.dispose();
-                new MainFrame(4).setVisible(true);
+                new StaffFrame(4).setVisible(true);
             } else {
                 if (name.equals("") || password.equals("")) showMessage("Please complete all information");
                 else {
                     staffController.addStaff(staff);
                     showMessage("Add Successful");
                     this.dispose();
-                    new MainFrame(4).setVisible(true);
+                    new StaffFrame(4).setVisible(true);
                 }
             }
         } catch (InvalidAgeException e) {

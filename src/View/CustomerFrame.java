@@ -1232,7 +1232,6 @@ public class CustomerFrame extends javax.swing.JFrame {
             } catch (InvalidEmailException e) {
                 showMessage(e.getMessage());
             }
-
     }
     public void setColor(JPanel panel){
         panel.setOpaque(true);
@@ -1293,7 +1292,6 @@ public class CustomerFrame extends javax.swing.JFrame {
         } catch (ClassNotFoundException e) {
             showMessage(e.getMessage());
         }
-
     }
     public void loadCartTable(){
         DefaultTableModel defaultCartTable = new DefaultTableModel(){
