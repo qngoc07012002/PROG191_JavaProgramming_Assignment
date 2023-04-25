@@ -44,7 +44,6 @@ public class CartController {
         if (!check) products.add(product);
         cart.setProductCart(products);
         writeCart(cart);
-
     }
 
     public void editCart(Product product) throws IOException, ClassNotFoundException, OutofStockException {
